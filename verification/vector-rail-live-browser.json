@@ -1,0 +1,44 @@
+{
+  "url": "https://grid-dijital-studio.vercel.app",
+  "browser": "151.0.7922.34",
+  "viewports": [
+    {
+      "width": 390,
+      "overflow": false,
+      "columns": 1,
+      "cityDialog": {
+        "width": 390,
+        "height": 620,
+        "bottomSheet": true
+      },
+      "turkishSearch": true,
+      "cancellation": true,
+      "keyboard": true,
+      "message": true,
+      "rail": "32s; runs when visible; pauses offscreen"
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "columns": 2,
+      "cityDialog": {
+        "width": 460,
+        "height": 590,
+        "bottomSheet": false
+      },
+      "turkishSearch": true,
+      "cancellation": true,
+      "keyboard": true,
+      "message": true,
+      "rail": "32s; runs when visible; pauses offscreen"
+    }
+  ],
+  "variants": {
+    "reducedMotion": true,
+    "touch": "Chromium touch emulation; selection and short viewport passed",
+    "noJavaScript": true,
+    "videoModal": "passed; external playback not tested"
+  },
+  "errors": [],
+  "status": "passed"
+}

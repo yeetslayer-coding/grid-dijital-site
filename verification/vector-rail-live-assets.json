@@ -1,0 +1,47 @@
+[
+  {
+    "file": "index.html",
+    "status": 200,
+    "matches_local": true
+  },
+  {
+    "file": "styles.css",
+    "status": 200,
+    "matches_local": true
+  },
+  {
+    "file": "app.js",
+    "status": 200,
+    "matches_local": true
+  },
+  {
+    "file": "grid-motion.js",
+    "status": 200,
+    "matches_local": true
+  },
+  {
+    "file": "assets/ges-vectors/advertising.svg",
+    "status": 200,
+    "matches_local": true
+  },
+  {
+    "file": "assets/ges-vectors/application.svg",
+    "status": 200,
+    "matches_local": true
+  },
+  {
+    "file": "assets/ges-vectors/proposal.svg",
+    "status": 200,
+    "matches_local": true
+  },
+  {
+    "file": "assets/ges-vectors/region.svg",
+    "status": 200,
+    "matches_local": true
+  },
+  {
+    "file": "assets/ges-vectors/villa.svg",
+    "status": 200,
+    "matches_local": true
+  }
+]
