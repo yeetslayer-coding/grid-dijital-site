@@ -1,0 +1,13 @@
+{
+  "name": "grid-dijital-site",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "python3 -m http.server 4317 --directory dist",
+    "check": "node --check dist/app.js",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}
