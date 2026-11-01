@@ -90,3 +90,9 @@ The preceding contact/comparison release `dpl_AmLk4xym8Gsagfc1X2Phbah2q7Bk` pass
 ### Final live panel/contact release
 
 Deployment `dpl_GpADKe35H49jWpaaZeTuEkioSJ4p`, source commit `581340c1df8494c40307d37e7e75714ee15fd6cb`, reached READY at https://grid-dijital-studio.vercel.app. The selected rail is directly linked at `/#akis`; the contact card is at `/#location-heading`. Both live runners passed at 390px and 1440px with no errors or horizontal overflow. Live rail and contact screenshots were visually reviewed at both widths. Evidence: `verification/panel-final-live-report.json`, `verification/panel-contact-live-report.json` and `verification/panel-final-live-assets.json`. HTML, CSS, both app scripts and comparison-page files are byte-identical to the tested local release. No call, form submission or message was sent.
+
+## Solar-module variety — 2026-11-01
+
+Kept two standard modules and varied the other three: portrait/red label, wide split array and dark frame/red corner detail. No new image, script or dependency was added. A source comparison confirms all HTML outside the rail is unchanged. The two repeat groups carry identical variants in the same order.
+
+Syntax, all 14 tests and whitespace checks passed. Actual Chromium checks passed at 320/390/768/1440px with zero page/console errors and no horizontal overflow. Rail screenshots at each width and the no-JavaScript fallback were visually reviewed: shared lower baseline, legible captions, distinct module proportions and cell layouts. The 32-second loop still joins within 1px; offscreen/reduced-motion behavior and existing form/video interactions pass. Static fallbacks retain the compact 154 × 112px footprint while preserving frame/cell/caption differences. Report: `verification/panel-variety-browser.json`.

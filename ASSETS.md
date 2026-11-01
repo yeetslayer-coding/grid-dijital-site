@@ -2,7 +2,7 @@
 
 ## Selected solar-module rail — 2026-11-01
 
-The user selected “Panel yüzeyleri” from the two working Perakende-scale comparisons. The active rail now uses native HTML/CSS: thin module frames, charcoal cell grids and HTML labels. No new bitmap, generated asset or large pictogram is used. Module geometry and labels match the selected comparison. Earlier SVG/imagegen files and provenance below are retained as prior iterations; project-card WebP assets remain unchanged.
+The user selected “Panel yüzeyleri” from the two working Perakende-scale comparisons. The active rail now uses native HTML/CSS: thin module frames, charcoal cell grids and HTML labels. No new bitmap, generated asset or large pictogram is used. The module family builds on the selected comparison, with later portrait, split-array and dark-frame variations recorded in DESIGN.md. Earlier SVG/imagegen files and provenance below are retained as prior iterations; project-card WebP assets remain unchanged.
 
 ## Flat vector rail — 2026-11-01
 
