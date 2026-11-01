@@ -2,6 +2,8 @@
 // The public preview intentionally has no tracking, remote lead submission or stored form data.
 (() => {
   const all = (query, root = document) => [...root.querySelectorAll(query)];
+  document.addEventListener('keydown', () => { document.body.dataset.input = 'keyboard'; });
+  document.addEventListener('pointerdown', () => { document.body.dataset.input = 'pointer'; }, { passive: true });
   all('[data-icon]').forEach(icon => icon.style.setProperty('--icon-url', `url('/assets/icons/${icon.dataset.icon}.svg')`));
 
   const menuButton = document.querySelector('.menu-button');
@@ -20,9 +22,19 @@
   const tabs = all('.stage-tab');
   const panels = all('.stage-panel');
   function selectStage(index, focus = false) {
-    tabs.forEach((tab, n) => { tab.setAttribute('aria-selected', String(n === index)); tab.tabIndex = n === index ? 0 : -1; panels[n].hidden = n !== index; });
+    tabs.forEach((tab, n) => {
+      const selected = n === index;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+      panels[n].hidden = !selected;
+      panels[n].toggleAttribute('inert', !selected);
+      panels[n].setAttribute('aria-hidden', String(!selected));
+      panels[n].tabIndex = selected ? 0 : -1;
+    });
     if (focus) tabs[index].focus();
   }
+  selectStage(0);
+  document.querySelector('.stage-panels').classList.add('tabs-ready');
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => selectStage(index));
     tab.addEventListener('keydown', event => {
@@ -42,7 +54,9 @@
   const videoContainer = document.querySelector('#video-container');
   let videoTrigger;
   function clearVideo() { videoContainer.replaceChildren(); videoTrigger?.focus(); }
-  all('[data-video]').forEach(button => button.addEventListener('click', () => {
+  function modalInput(event) { dialog.toggleAttribute('data-instant', event.detail === 0 || event.type === 'cancel' || document.body.dataset.input === 'keyboard'); }
+  all('[data-video]').forEach(button => button.addEventListener('click', event => {
+    modalInput(event);
     videoTrigger = button;
     const video = button.dataset.video;
     const title = button.dataset.title;
@@ -57,12 +71,13 @@
     videoContainer.replaceChildren(iframe);
     dialog.showModal();
   }));
-  dialog.querySelector('.close-dialog').addEventListener('click', () => dialog.close());
+  dialog.querySelector('.close-dialog').addEventListener('click', event => { modalInput(event); dialog.close(); });
+  dialog.addEventListener('cancel', modalInput);
   dialog.addEventListener('close', clearVideo);
   dialog.addEventListener('click', event => {
     if (event.target === dialog) {
       const rect = dialog.getBoundingClientRect();
-      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) { modalInput(event); dialog.close(); }
     }
   });
 
@@ -91,12 +106,19 @@
   document.querySelector('#edit-brief').addEventListener('click', () => { result.hidden = true; form.hidden = false; citySelect.focus(); });
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const production = document.querySelector('.production-line');
+  const motionToggle = production.querySelector('.motion-toggle');
+  motionToggle.addEventListener('click', () => {
+    const paused = production.classList.toggle('is-paused');
+    motionToggle.setAttribute('aria-pressed', String(paused));
+    motionToggle.textContent = paused ? 'Bandı oynat' : 'Bandı durdur';
+  });
   if ('IntersectionObserver' in window && !reduced.matches) {
     document.documentElement.classList.add('js-reveal');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
-    }, { threshold: .06 });
-    all('.reveal').forEach(element => observer.observe(element));
+    }, { threshold: .08 });
+    all('.reveal').forEach((element, index) => { element.style.setProperty('--reveal-delay', `${(index % 2) * 75}ms`); observer.observe(element); });
     reduced.addEventListener('change', event => { if (event.matches) { observer.disconnect(); document.documentElement.classList.remove('js-reveal'); } });
   }
   document.addEventListener('visibilitychange', () => document.body.classList.toggle('is-hidden', document.hidden));

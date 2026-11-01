@@ -1,6 +1,6 @@
 # Grid Dijital
 
-A new private website concept created from scratch with the stitch-design-taste skill. The original production website is unchanged.
+Grid’s private website preview, now using Perakende Dijital’s layout, paper texture, glass surfaces and industrial motion with the approved Grid red palette. Implemented with stitch-design-taste, animate and Sites.
 
 ## Run
 
@@ -15,7 +15,7 @@ The buildless deliverable is `dist/`. Run `npm run check` and `npm test` for syn
 
 ## Scope
 
-- Self-hosted brand fonts, responsive layout, generated solar sculpture.
+- Self-hosted Outfit/Geist, responsive glass surfaces, generated GES scene, solar texture and anchored canvas grid.
 - Keyboard-accessible process tabs, mobile navigation, native FAQ disclosures.
 - Four real customer videos loaded only after a click.
 - Two-field contact brief, inline validation and explicit WhatsApp handoff.
@@ -24,3 +24,5 @@ The buildless deliverable is `dist/`. Run `npm run check` and `npm test` for syn
 - Private preview is deliberately noindex. Custom production domain has not changed.
 
 `DESIGN.md` records the design system; `ASSETS.md` records provenance; `VALIDATION.md` records performed checks and limits.
+
+Browser verification: `scripts/browser-qa.mjs` uses Playwright with a running local preview. Set `PLAYWRIGHT_MODULE` and `BROWSER_PATH` if using a separately installed test environment. Screenshots and the detailed report are written to ignored `qa/`; the portable summary is committed under `verification/`. External video playback is outside the automated transport-stub check.

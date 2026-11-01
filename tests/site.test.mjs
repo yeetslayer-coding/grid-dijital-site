@@ -4,10 +4,11 @@ import { readFileSync, existsSync } from 'node:fs';
 import { JSDOM } from 'jsdom';
 const html = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8');
 const script = readFileSync(new URL('../dist/app.js', import.meta.url), 'utf8');
-function setup() {
+function setup(options = {}) {
   const dom = new JSDOM(html, { url: 'https://grid.example/', runScripts: 'outside-only', pretendToBeVisual: true });
   const { window } = dom;
-  window.matchMedia = () => ({ matches: false, addEventListener() {} });
+  window.matchMedia = options.matchMedia || (() => ({ matches: false, addEventListener() {} }));
+  if (options.IntersectionObserver) window.IntersectionObserver = options.IntersectionObserver;
   const dialog = window.document.querySelector('dialog');
   dialog.showModal = function () { this.open = true; };
   dialog.close = function () { this.open = false; this.dispatchEvent(new window.Event('close')); };
@@ -37,6 +38,11 @@ test('process tabs expose exactly one panel and support arrow, Home and End navi
     assert.equal(tabs[index].getAttribute('aria-selected'), 'true');
     assert.equal(document.querySelector(`#${tabs[index].getAttribute('aria-controls')}`).hidden, false);
     assert.equal(tabs[index].tabIndex, 0);
+    [...document.querySelectorAll('[role=tabpanel]')].forEach((panel, n) => {
+      assert.equal(panel.hasAttribute('inert'), n !== index);
+      assert.equal(panel.getAttribute('aria-hidden'), String(n !== index));
+      assert.equal(panel.tabIndex, n === index ? 0 : -1);
+    });
   }
   check(0); tabs[2].click(); check(2);
   tabs[2].dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true })); check(3);
@@ -84,6 +90,7 @@ test('video is requested only on click and unloaded when its dialog closes', () 
   const button = document.querySelector('[data-video]');
   button.click();
   assert.equal(document.querySelector('dialog').open, true);
+  assert.equal(document.querySelector('dialog').hasAttribute('data-instant'), true, 'keyboard activation is instant');
   assert.match(document.querySelector('iframe').src, /youtube-nocookie\.com\/embed\/j4m6kfkmXHY/);
   assert.equal(document.querySelector('#video-title').textContent, 'Suntep Solar');
   document.querySelector('.close-dialog').click();
@@ -112,4 +119,46 @@ test('all local assets, anchor destinations, labels and ARIA relationships resol
   assert.equal(document.documentElement.lang, 'tr');
   assert.equal(document.querySelector('meta[name=robots]').content, 'noindex,nofollow');
   close();
+});
+
+test('conveyor pause control preserves its accessible state', () => {
+  const { document, close } = setup();
+  const button = document.querySelector('.motion-toggle');
+  button.click();
+  assert.equal(button.getAttribute('aria-pressed'), 'true');
+  assert.ok(document.querySelector('.production-line').classList.contains('is-paused'));
+  assert.equal(button.textContent, 'Bandı oynat');
+  button.click();
+  assert.equal(button.getAttribute('aria-pressed'), 'false');
+  assert.equal(button.textContent, 'Bandı durdur');
+  close();
+});
+test('reveal observer staggers by 75ms, runs once, and releases all content when reduced motion is requested', () => {
+  let callback, preference, disconnected = false; const observed = [], released = [];
+  class Observer {
+    constructor(cb) { callback = cb; }
+    observe(el) { observed.push(el); }
+    unobserve(el) { released.push(el); }
+    disconnect() { disconnected = true; }
+  }
+  const { document, close } = setup({ IntersectionObserver: Observer, matchMedia: query => ({ matches: false, addEventListener: (_, cb) => { if (query.includes('reduced-motion')) preference = cb; } }) });
+  assert.ok(document.documentElement.classList.contains('js-reveal'));
+  assert.equal(observed[0].style.getPropertyValue('--reveal-delay'), '0ms');
+  assert.equal(observed[1].style.getPropertyValue('--reveal-delay'), '75ms');
+  callback([{ target: observed[0], isIntersecting: true }]);
+  assert.equal(released[0], observed[0]);
+  assert.ok(observed[0].classList.contains('is-visible'));
+  preference({ matches: true });
+  assert.ok(disconnected);
+  assert.equal(document.documentElement.classList.contains('js-reveal'), false);
+  close();
+});
+test('without JavaScript all four process descriptions remain accessible and each video has a direct link', () => {
+  const dom = new JSDOM(html);
+  const document = dom.window.document;
+  assert.equal(document.querySelectorAll('.stage-panel:not([hidden]):not([inert]):not([aria-hidden=true])').length, 4);
+  assert.equal(document.querySelectorAll('noscript a[href*="youtube.com/watch"]').length, 4);
+  assert.ok(document.querySelector('noscript style'), 'noscript style must be actual HTML, not escaped text');
+  assert.ok(document.querySelector('.official-application a').href.includes('griddijital.com'));
+  dom.window.close();
 });

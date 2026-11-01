@@ -1,0 +1,119 @@
+{
+  "browser": "151.0.7922.34",
+  "viewports": [
+    {
+      "width": 320,
+      "overflow": false,
+      "panelHeights": [
+        840.640625,
+        840.640625,
+        840.640625,
+        840.640625
+      ],
+      "activePanels": 1,
+      "inertPanels": 3,
+      "hiddenFocusBlocked": true,
+      "keyboardInstant": true,
+      "blur": "blur(8px) saturate(1.12)"
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "panelHeights": [
+        789.078125,
+        789.078125,
+        789.078125,
+        789.078125
+      ],
+      "activePanels": 1,
+      "inertPanels": 3,
+      "hiddenFocusBlocked": true,
+      "keyboardInstant": true,
+      "blur": "blur(8px) saturate(1.12)"
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "panelHeights": [
+        401.046875,
+        401.046875,
+        401.046875,
+        401.046875
+      ],
+      "activePanels": 1,
+      "inertPanels": 3,
+      "hiddenFocusBlocked": true,
+      "keyboardInstant": true,
+      "blur": "blur(16px) saturate(1.12)"
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "panelHeights": [
+        390.0625,
+        390.0625,
+        390.0625,
+        390.0625
+      ],
+      "activePanels": 1,
+      "inertPanels": 3,
+      "hiddenFocusBlocked": true,
+      "keyboardInstant": true,
+      "blur": "blur(16px) saturate(1.12)"
+    }
+  ],
+  "variants": {
+    "interactions": {
+      "conveyorPause": true,
+      "localBrief": true,
+      "keyboardDialogAndEscape": true,
+      "iframePlayback": "not tested: transport stubbed"
+    },
+    "reducedMotion": {
+      "staticGrid": true,
+      "staticConveyor": true
+    },
+    "blurFallback": {
+      "simulatedUnsupportedGate": true,
+      "opaqueSurface": true
+    },
+    "touch": {
+      "mobileEmulation": true,
+      "menu": true,
+      "tabs": true,
+      "dprCap": 1.5,
+      "magneticPointer": false
+    },
+    "noJavaScript": {
+      "fourReadablePanels": true,
+      "navigation": true,
+      "officialContact": true,
+      "directVideoLinks": 4,
+      "overflow": false
+    }
+  },
+  "reference": [
+    {
+      "width": 320,
+      "url": "https://perakendedijital.com/",
+      "heading": "Gıda üreticileri için\nmarka,\ne-ticaret\nve reklam."
+    },
+    {
+      "width": 390,
+      "url": "https://perakendedijital.com/",
+      "heading": "Gıda üreticileri için\nmarka,\ne-ticaret\nve reklam."
+    },
+    {
+      "width": 768,
+      "url": "https://perakendedijital.com/",
+      "heading": "Gıda üreticileri için\nmarka,\ne-ticaret\nve reklam."
+    },
+    {
+      "width": 1440,
+      "url": "https://perakendedijital.com/",
+      "heading": "Gıda üreticileri için\nmarka,\ne-ticaret\nve reklam."
+    }
+  ],
+  "status": "passed",
+  "consoleErrors": []
+}

@@ -1,32 +1,39 @@
-# Design System: Grid Dijital
+# Grid Dijital — Perakende visual-system transfer
 
-## 1. Visual Theme & Atmosphere
-A solar growth studio designed with the precision of an architecture practice. Airy neutral canvas, tangible 3D solar objects and asymmetric editorial typography. Confident, calm and unmistakably Grid. DESIGN_VARIANCE 8, MOTION_INTENSITY 6, VISUAL_DENSITY 3. Created from scratch following stitch-design-taste after the user's restart. The earlier sunset direction is archived and not used.
+Implemented 2026-11-01. The approved direction copies the visual mechanics of `/Users/yigit/Documents/ChatGPT/perakende dijital/perakende-dijital-site` into the existing static Grid site. Perakende is read-only. Grid's brand, actual references, services, guides and contact destinations remain the content source.
 
-## 2. Color Palette & Roles
-- Studio Canvas (#F4F4F2): main neutral background, consistent throughout.
-- Clean Surface (#FAFAF9): elevated contact and interactive surfaces.
-- Charcoal Ink (#202222): primary type, inverse component background.
-- Secondary Graphite (#646664): readable body copy.
-- Mineral Surface (#E9EAE7): visual diagram bases and input fills.
-- Structural Line (#D8DAD5): restrained separators.
-- Grid Red (#B93643): the only chromatic UI accent, saturation below 80%; buttons, selected tabs, emphasized headline words and focus. White-on-red is above WCAG AA. Source logo colors remain unchanged.
-No neon, purple, pure black or inconsistent warm/cool neutral families. Photographic colors are intrinsic to source images.
+## Palette and typography
 
-## 3. Typography Rules
-Use self-hosted Outfit (Grid Display) and Manrope (Grid Body) variable fonts from Google Fonts, preserving the original site’s font-family choices and including full Turkish glyph coverage. Display 500-550; body 400-650. Hero clamp(48px,5.2vw,76px), tracking -.055em, leading 1.04. Section heads clamp(36px,4.2vw,60px), tracking -.045em. Body 16px, leading 1.75, maximum 65ch. Labels 12px, navigation 13px. Bold is selective. No Inter or serif. Small contextual solar imagery sits inside the headline as visual punctuation and moves below the full headline on mobile.
+- Grid Red `#B93643`: primary actions, process background, solar showcase and accents. Hover `#A72C38`.
+- Canvas `#F4F4F2`, surface `#FAFAF9`, ink `#202222`, muted `#646664`, mineral `#E9EAE7`, line `#D8DAD5`.
+- No Perakende cobalt/lime palette. Source images retain their inherent photographic colors.
+- Outfit headings, locally served variable font. Geist body, locally served 400/500/600 weights. OFL files accompany the fonts. Full Turkish glyph coverage.
+- Desktop headline clamp(46px, 4.65vw, 67px), opening audience line .59em; mobile headline clamp(34px, 10vw, 68px). Body 16px, supporting desktop hero text 15px. Heading leading 1.065, tracking -.055em.
 
-## 4. Component Stylings
-Buttons: 8px corners, 54px height, flat red with light text, tactile .98 scale on press, 2px lift on hover. One hero CTA. Icons are locally hosted Tabler outline icons with consistent 1.7 stroke width. Media corners 24px. Meaningful group panels 24px; cards are used only for references and the guided contact interaction. Inputs have permanent labels, 52px height, visible errors. Service rows have clear expansion and selected state. Real customer videos open in native dialogs, loaded only on request; the dialog includes a YouTube fallback. Contact generates a reviewable message locally; the user explicitly chooses WhatsApp or the existing official application. Never report a lead as submitted locally.
+## Geometry and surfaces
 
-## 5. Layout Principles
-Maximum width 1320px. Desktop gutter 56px; tablet 32px; phone 20px. Hero is 1.1fr/1fr, with all text and the sculptural hero asset in distinct spatial zones. Three controlled headline lines, never covering the artwork. The customer index sits below as real reference links, not fabricated logos. System uses a 5fr/7fr layout with interactive stages. Case studies use a featured 1.25fr/1fr layout. Services use an asymmetric editorial accordion; guides use a two-column layout. All multi-column layouts become one column below 768px. No horizontal scroll or absolute-positioned content overlaps. Mobile touch targets >=44px; spacing clamp(64px,8vw,112px).
+Maximum content width 1280px. Desktop gutters 48px, intermediate 32px, phone 20px. Section spacing 112/88/64px. Hero uses 1.06fr/1fr columns, 66px gap, source browser-frame composition, then one column on phones. Services use the source two-column 1.12fr/1fr glass layout.
 
-## 6. Motion & Interaction
-CSS transitions and IntersectionObserver are sufficient for this static presentation site. Motion uses cubic-bezier(.16,1,.3,1), approximating stiffness 100/damping 20. Hero illustration gently floats; only active process markers breathe to show which step is selected. Entry animations stagger opacity and transform by 60ms. No continuous JS render loop, scroll hijacking or custom cursor. Reduced-motion disables continuous movement, reveals content immediately and removes smooth scrolling. Visibility changes pause perpetual animation. Menus and dialogs close on Escape. Process tabs support arrows/Home/End and correctly manage aria-selected, tabindex and hidden panels. Native details for FAQ and services.
+Shared `.liquid-glass` supplies neutral translucent fills, inset top/side highlights, a tight 2px/7px shadow and a broad 24px/48px shadow. Radius 22px for principal cards. Blur is 16px on desktop and 8px on phones. Opaque gradients are the default; `@supports` enables transparency. Reduced-transparency also restores opaque surfaces. Header, showcase, service cards, process panels, customer video frames, solutions, guides, FAQ and contact use this system.
 
-## 7. Anti-Patterns (Banned)
-No fake client results, invented percentages, fabricated testimonials, made-up partnerships, generic dashboards, emojis, Inter, generic serif, pure black, neon, gradient headlines, custom cursor, overlapping content, three equal feature cards, useless scroll cues or placeholder copy. No fake form success or invented sales guarantee. Generated artwork is conceptual and clearly described in alt/caption. No analytical tracking or third-party iframe before interaction.
+Paper grain is copied from the source. Solar modules, roof structures, wiring and proposal outlines replace packaging motifs at the source desktop/mobile density. A separate anchored canvas grid sits behind the content; the red process section has an inverse grid. Decorative layers ignore pointer input and are hidden from assistive technology.
 
-## Content provenance and scope
-Brand/logo/fonts, services, real reference names/video IDs and official contact destinations were read from griddijital.com on 2026-11-01. The new website is an independent private design preview; official application and guide routes continue to their existing URLs. Do not change griddijital.com or its DNS as part of this preview. Preserve anchor continuity: sistem, kanit, rehber, teklif, garanti, sss, uygunluk.
+## Composition and content
+
+Hero pairs the Grid message with a glass browser frame containing a generated solar scene. The inline panel/cursor image punctuates the headline. Scene alt text and caption explicitly identify it as representative. The source conveyor geometry now carries Bölge → Reklam → Başvuru → Keşif → Teklif. Its visible pause control is reversible.
+
+Four process tabs use light selected surfaces on a red section. All initialized panels share one CSS grid cell, so even inactive panels contribute to the common height. Inactive panels have hidden, inert, aria-hidden and tabindex=-1. Without JavaScript, all four descriptions appear sequentially.
+
+Actual Grid customer video IDs, service/guide links, phone and WhatsApp destination are preserved. No Perakende calculator, client content, sales promise or food-specific copy is included. Contact prepares a local reviewable note; WhatsApp opens only when the user activates its link. There is no backend, persistence, analytics or remote form submission.
+
+## Motion specification
+
+Native CSS/JavaScript only. Shared curve `cubic-bezier(.23,1,.32,1)`. Button response 140ms; native video dialog 250ms, scale .96 to 1; source reveal duration 700ms with 75ms stagger, revealed once. Keyboard tab and modal transitions are instant. Hover transforms and magnetic grid input require a fine pointer. No custom cursor or scroll hijacking.
+
+Grid port preserves fixed intersections and gently displaced quadratic control points: mass 1, stiffness 100, damping 10; visible midpoint displacement at most 6px. 30fps on fine pointers, 24fps on coarse pointers, DPR cap 1.5. Offscreen surfaces are not painted. Hidden documents cancel the animation frame. One controller owns both canvases, observers and lifecycle cleanup.
+
+Conveyor travels for 32 seconds per loop; rollers rotate every 2 seconds. User pause and hidden-document state pause CSS animation. Reduced motion displays a static wrapped five-stage band, fixed grid and immediate reveals; positional hover animation is disabled. The no-JavaScript version is also static and offers direct YouTube links and the official contact route.
+
+## Delivery boundary
+
+The existing owner-private Grid Site is the deployment target. Keep noindex/nofollow. Do not change griddijital.com, DNS, site access or the Perakende checkout. Browser and behavioral evidence is recorded in VALIDATION.md; generated-asset prompts and licenses in ASSETS.md.
