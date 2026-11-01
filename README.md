@@ -19,7 +19,7 @@ The buildless deliverable is `dist/`. Run `npm run check` and `npm test` for syn
 - Keyboard-accessible process tabs, mobile navigation, native FAQ disclosures.
 - Four real customer videos loaded only after a click.
 - Searchable 81-city native dialog, four illustrated project radio cards, inline validation and explicit WhatsApp brief handoff.
-- Flat outlined-and-filled SVG illustrations on the original 32-second conveyor; static reduced-motion and JavaScript-free versions.
+- Thin-framed solar modules with HTML stage labels on the original 32-second conveyor; static reduced-motion and JavaScript-free versions.
 - Existing official application and guide destinations.
 - No analytics, cookies, contact database or simulated lead success.
 - Vercel preview is deliberately noindex. Custom production domain has not changed.

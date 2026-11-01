@@ -1,8 +1,12 @@
 # Assets and provenance
 
+## Selected solar-module rail — 2026-11-01
+
+The user selected “Panel yüzeyleri” from the two working Perakende-scale comparisons. The active rail now uses native HTML/CSS: thin module frames, charcoal cell grids and HTML labels. No new bitmap, generated asset or large pictogram is used. Module geometry and labels match the selected comparison. Earlier SVG/imagegen files and provenance below are retained as prior iterations; project-card WebP assets remain unchanged.
+
 ## Flat vector rail — 2026-11-01
 
-The active conveyor uses five original hand-authored SVG drawings in `dist/assets/ges-vectors/`: `region.svg`, `advertising.svg`, `application.svg`, `villa.svg` and `proposal.svg`. They depict a flat street map and pin, front-facing advertising display, applicant clipboard, solar-roof house elevation and approved proposal folder. These are native paths and shapes, not traced or embedded raster images. No external artwork or icon library is used.
+The previous conveyor version used five original hand-authored SVG drawings in `dist/assets/ges-vectors/`: `region.svg`, `advertising.svg`, `application.svg`, `villa.svg` and `proposal.svg`. They depict a flat street map and pin, front-facing advertising display, applicant clipboard, solar-roof house elevation and approved proposal folder. These are native paths and shapes, not traced or embedded raster images. No external artwork or icon library is used.
 
 All five share a 200 × 200 viewBox, 2.5-unit rounded charcoal strokes and a y=196 baseline. Colors are Grid red `#B93643`, ink `#202222`, canvas `#F4F4F2` and mineral `#E9EAE7`. There is no perspective, lighting, shadow, gradient or filter. Stage numbers and names remain HTML. The old image-specific alpha-padding offsets are removed.
 

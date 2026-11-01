@@ -1,0 +1,24 @@
+{
+  "url": "https://grid-dijital-studio.vercel.app",
+  "browser": "151.0.7922.34",
+  "widths": [
+    {
+      "width": 390,
+      "options": true,
+      "keyboard": true,
+      "contact": true,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "options": true,
+      "keyboard": true,
+      "contact": true,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "reducedMotion": true,
+  "noJavaScriptContact": true,
+  "status": "passed"
+}

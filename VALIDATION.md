@@ -78,3 +78,11 @@ Read the actual Perakende `production-line.tsx` and location-card source, then c
 All 14 existing tests, JavaScript syntax checks and whitespace validation passed. `scripts/design-options-qa.mjs` passed on real Chromium 151.0.7922.34 at 320, 390, 768 and 1440px: both variants render without overflow, tab clicks/arrow keys select exactly one variant and retain focus, each rail runs for 32 seconds, reduced motion is static, and the contact card/map/phone work without JavaScript. Map destination resolves the existing street/door in Keşan; phone link remains `tel:+905515062980`. Both contact actions have at least 44px height. No phone call, message or map navigation was initiated. Zero page/console errors. Portable report: `verification/design-options-browser.json`.
 
 The comparison is a separate route; the main rail awaits the user's choice. The location/telephone changes are ready for publication. Source Perakende files remain unmodified. Browser-emulated widths are not physical-device/Safari evidence.
+
+### Selected direction: panel surfaces
+
+The user selected option 02, “Panel yüzeyleri”. The main rail now uses that exact 184 × 132px module design, thin frames/cell grids and integrated HTML stage labels. The five stages and original 32-second loop are retained. Reduced-motion and JavaScript-free modules use 154 × 112px. The comparison page is retained as a reference, marked with the chosen direction and defaults to panels.
+
+Syntax checks, all 14 updated tests and whitespace checks passed. Actual Chromium checks passed again at 320, 390, 768 and 1440px for the final main page: no horizontal overflow, no console/page errors, matching loop endpoints, correct offscreen state, native city/brief interactions, static reduced-motion stages and JavaScript-free contact alternatives. Rail screenshots at all four widths and no-JavaScript screenshots were reviewed against the selected comparison. Report: `verification/panel-final-report.json`.
+
+The preceding contact/comparison release `dpl_AmLk4xym8Gsagfc1X2Phbah2q7Bk` passed live 390/1440px checks and asset byte comparisons; evidence is retained in `verification/design-options-live-report.json` and `verification/design-options-live-assets.json`. Final main-rail deployment evidence follows separately.

@@ -24,7 +24,7 @@
       if (next !== undefined) { event.preventDefault(); select(tabs[next].dataset.direction, true); }
     });
   });
-  select(new URL(location.href).searchParams.get('yon'));
+  select(new URL(location.href).searchParams.get('yon') || 'panel');
   const lines = document.querySelectorAll('.production-line');
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('is-offscreen', !entry.isIntersecting)));
