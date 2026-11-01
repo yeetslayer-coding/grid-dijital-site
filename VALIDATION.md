@@ -132,3 +132,14 @@ Syntax checks, all 21 interaction/rule tests and whitespace checks passed. The f
 ### Live process restoration
 
 Deployment `dpl_6iLFHUJ3Fsv8wwnVSVDhUD9Bpvgt` (source `91ace6a5fb6ce5ecaf16619e63c1bb98e2806e96`) is READY at https://grid-dijital-studio.vercel.app. Live Chromium checks at 390px and 1440px confirm the CRM demo is absent, all four original process tabs work with equal panel height, keyboard navigation works, and there are no page/console errors or horizontal overflow. Retained advertising tabs and city search also pass. All four process descriptions remain available with JavaScript disabled. Final mobile/desktop screenshots were inspected after the reveal transition completed. `verification/process-restored-live-browser.json` records results; `verification/process-restored-live-assets.json` confirms HTTP 200 and byte equality for HTML, both stylesheets and all four scripts.
+
+
+## One city-selection area — 2026-11-01
+
+Removed the repeated city selector from the right-hand form. The map is now step 01 and owns the only city-search opener; the form begins with the step 02 project cards. The hidden canonical city value remains associated with the brief through `form="brief-form"`. The shared summary and WhatsApp draft retain the selected city. Missing-city validation appears under the map and focuses its list button. Dialog cancellation preserves the choice and returns focus to that button. Editing a completed note focuses the selected project. Advertising CTAs scroll to the map when the city is missing and to the selected project otherwise.
+
+All 21 Node interaction/rule tests, JavaScript syntax checks and whitespace checks pass. Updated assertions cover a single city-dialog opener, form association, error and edit focus, map/search synchronization, canonical values and project-CTA focus. HTML outside the contact area is unchanged.
+
+Actual Chromium 151.0.7922.34 passed at 320, 390, 768 and 1440px: one search control, actual SVG selection, Turkish/ASCII search, empty search, cancellation, Escape and keyboard focus containment, correct brief/WhatsApp text, and visible focus after the advertising CTA. No horizontal overflow or page/console errors. All four complete contact screenshots were visually reviewed after reveal transitions finished. Reduced motion, touch emulation and a short mobile viewport passed. With JavaScript disabled the inert list opener is hidden and official contact/telephone alternatives remain. Existing rail behavior and lazy video modal checks also passed. Video transport was stubbed; physical-device and video-playback testing are not claimed.
+
+Evidence: `verification/single-city-browser.json`; screenshots in ignored `qa/single-city-*.png`. The screenshot runner explicitly visits both contact columns before capture so its one-time reveal assertions also work in the mobile stacked layout.

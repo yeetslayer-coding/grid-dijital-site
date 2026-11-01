@@ -41,11 +41,11 @@ The active deployment target is `g-class/grid-dijital-studio` at https://grid-di
 
 ## Visual selection and city search
 
-The contact panel retains its heading and local-only two-field brief. A numbered city group opens a native dialog with an 81-city search. A numbered project group uses native radio inputs styled as image cards: two columns at desktop/tablet, one column below 768px. Each card has a realistic miniature, short explanation and a visible selected check. Selected city/project appear in a live summary before the unchanged primary action.
+The local-only brief uses one city selection area: the map in the left column, labelled step 01, with one native 81-city search alternative beneath it. The right contact panel retains its heading and starts directly with the step 02 project group, using native radio inputs styled as image cards: two columns at desktop/tablet, one column below 768px. Each card has a realistic miniature, short explanation and a visible selected check. Selected city/project appear in a live summary before the unchanged primary action. There is no second city selector in the form. The hidden canonical city field is associated with the form via its form attribute. Missing-city validation appears beside the map and focuses its list button; editing the completed note returns focus to the selected project. Showcase CTAs focus and scroll to the map list when the city is missing, or the selected project when it is present.
 
 City search is a fixed-height compact desktop dialog and a mobile bottom sheet. Filtering preserves the window height. Turkish case and diacritics are normalized for ASCII search; only canonical city-list values are committed. Escape, backdrop and cancel retain the previous choice. Native dialog owns focus containment; Arrow keys/Home/End navigate results, unique-result Enter selects, and closing returns focus to the trigger. Search has no network dependency. No backend or persistent state is added.
 
-Cards and the city trigger use 140ms response. The city dialog uses the existing 250ms curve; keyboard-initiated transitions are instant. Reduced motion removes positional transitions. No-JavaScript preserves official contact and the static five-stage rail. Selection-card WebP images remain unchanged; the rail is HTML/CSS. Asset provenance is in ASSETS.md.
+Cards use 140ms response. The city dialog uses the existing 250ms curve; keyboard-initiated transitions are instant. Reduced motion removes positional transitions. No-JavaScript preserves official contact and the static five-stage rail. Selection-card WebP images remain unchanged; the rail is HTML/CSS. Asset provenance is in ASSETS.md.
 
 ## Contact placement and rail comparison
 

@@ -98,7 +98,7 @@
   const result = document.querySelector('#brief-result');
   const cityError = document.querySelector('#city-error');
   const projectError = document.querySelector('#project-error');
-  const cityTrigger = document.querySelector('#city-trigger');
+  const cityTrigger = document.querySelector('#map-city-list');
   const cityDialog = document.querySelector('#city-dialog');
   const citySearch = document.querySelector('#city-search');
   const cityResults = document.querySelector('#city-results');
@@ -111,13 +111,11 @@
     citySelect.value = state.city;
     all('input[name=project]', form).forEach(input => { input.checked = input.value === state.project; });
     const selected = form.querySelector('input[name=project]:checked');
-    document.querySelector('#city-value').textContent = state.city || 'Şehrinizi seçin';
-    cityTrigger.classList.toggle('has-selection', !!state.city);
     summary.classList.toggle('has-selection', !!state.city || !!selected);
     summary.querySelector('span').textContent = state.city || selected
       ? `${state.city || 'Şehir seçin'} · ${selected?.closest('label').querySelector('strong').textContent || 'Proje türü seçin'}`
       : 'Şehir ve proje türünü seçin.';
-    if (state.city) { cityError.hidden = true; citySelect.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-describedby'); }
+    if (state.city) { cityError.hidden = true; citySelect.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-invalid'); cityTrigger.setAttribute('aria-describedby', 'map-selection'); }
     if (selected) { projectError.hidden = true; all('input[name=project]').forEach(input => { input.removeAttribute('aria-invalid'); input.removeAttribute('aria-describedby'); }); }
     const message = window.GridLogic.buildBrief(state);
     document.querySelector('#brief-message').textContent = message;
@@ -159,9 +157,9 @@
     cityResults.hidden = matches.length === 0;
     cityCount.textContent = matches.length ? `${matches.length} şehir` : 'Sonuç bulunamadı';
   }
-  let cityReturnFocus = cityTrigger;
-  function openCity(event, returnFocus = cityTrigger) {
-    cityReturnFocus = returnFocus;
+  function openCity(event) {
+    result.hidden = true;
+    form.hidden = false;
     cityMotion(event);
     citySearch.value = '';
     renderCities();
@@ -170,7 +168,6 @@
     citySearch.focus();
   }
   cityTrigger.addEventListener('click', event => openCity(event));
-  document.addEventListener('grid:open-city', event => openCity({ detail:event.detail.keyboard ? 0 : 1 }, event.detail.trigger));
   citySearch.addEventListener('input', renderCities);
   citySearch.addEventListener('keydown', event => {
     if (event.isComposing) return;
@@ -204,7 +201,7 @@
   cityDialog.addEventListener('close', () => {
     if (cityDialog.open) return;
     cityTrigger.setAttribute('aria-expanded', 'false');
-    cityReturnFocus.focus();
+    cityTrigger.focus();
   });
   cityDialog.addEventListener('click', event => {
     if (event.target !== cityDialog) return;
@@ -220,13 +217,15 @@
     cityError.hidden = !!city; projectError.hidden = !!project;
     citySelect.setAttribute('aria-invalid', String(!city));
     cityTrigger.setAttribute('aria-invalid', String(!city));
-    if (!city) cityTrigger.setAttribute('aria-describedby', 'city-error');
-    else cityTrigger.removeAttribute('aria-describedby');
+    cityTrigger.setAttribute('aria-describedby', city ? 'map-selection' : 'map-selection city-error');
     all('input[name=project]').forEach(input => { input.setAttribute('aria-invalid', String(!project)); if (!project) input.setAttribute('aria-describedby', 'project-error'); });
     if (!city || !project) { (!city ? cityTrigger : form.querySelector('input[name=project]')).focus(); return; }
     form.hidden = true; result.hidden = false; result.focus();
   });
-  document.querySelector('#edit-brief').addEventListener('click', () => { result.hidden = true; form.hidden = false; cityTrigger.focus(); });
+  document.querySelector('#edit-brief').addEventListener('click', () => {
+    result.hidden = true; form.hidden = false;
+    (form.querySelector('input[name=project]:checked') || form.querySelector('input[name=project]')).focus();
+  });
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const production = document.querySelector('.production-line');

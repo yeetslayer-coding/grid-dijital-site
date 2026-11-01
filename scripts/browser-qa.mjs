@@ -16,7 +16,7 @@ async function closeCity(keyboard = true) {
   if (keyboard) await page.keyboard.press('Escape');
   else await page.locator('.city-cancel').click();
   await page.locator('#city-dialog').waitFor({ state: 'hidden' });
-  assert.equal(await page.locator('#city-trigger').evaluate(el => el === document.activeElement), true);
+  assert.equal(await page.locator('#map-city-list').evaluate(el => el === document.activeElement), true);
 }
 try {
   for (const width of widths) {
@@ -25,6 +25,9 @@ try {
     assert.equal(response.status(), 200);
     await page.evaluate(() => document.fonts.ready);
     assert.equal(await page.locator('.motion-toggle,.parcel').count(), 0);
+    assert.equal(await page.locator('[aria-controls=city-dialog]').count(), 1, 'one city search entry point');
+    assert.equal(await page.locator('#brief-form [aria-controls=city-dialog]').count(), 0);
+    assert.equal(await page.locator('#city').evaluate(el => el.form.id), 'brief-form');
     const track = page.locator('.conveyor-track');
     await page.locator('.contact-panel').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('.production-line').classList.contains('is-offscreen'));
@@ -60,10 +63,16 @@ try {
     const cards = await page.locator('.project-card').evaluateAll(els => els.map(el => { const r=el.getBoundingClientRect();return { top:r.top, left:r.left, width:r.width, height:r.height }; }));
     assert.equal(Math.abs(cards[0].top - cards[1].top) < 2, width >= 768, 'card columns');
     assert.ok(cards.every(c => c.height >= 100));
+    for (const panel of await page.locator('#uygunluk .reveal').all()) {
+      await panel.scrollIntoViewIfNeeded();
+      await page.waitForFunction(el => getComputedStyle(el).opacity === '1', await panel.elementHandle());
+    }
+    await page.waitForFunction(() => [...document.querySelectorAll('#uygunluk .reveal')].every(el => getComputedStyle(el).opacity === '1'));
+    await page.locator('#uygunluk').screenshot({ path: `qa/${label}-${width}-contact.png` });
     await page.locator('button.form-button').click();
-    assert.equal(await page.locator('#city-trigger').evaluate(el => el === document.activeElement), true);
+    assert.equal(await page.locator('#map-city-list').evaluate(el => el === document.activeElement), true);
     assert.equal(await page.locator('#city-error').isVisible(), true);
-    await page.locator('#city-trigger').click();
+    await page.locator('#map-city-list').click();
     const dialog = page.locator('#city-dialog');
     await page.waitForTimeout(300);
     assert.equal(await page.locator('#city-search').evaluate(el => el === document.activeElement), true);
@@ -86,15 +95,15 @@ try {
     await page.locator('#city-search').press('Enter');
     await dialog.waitFor({ state: 'hidden' });
     assert.equal(await page.locator('#city').inputValue(), 'İzmir');
-    assert.equal(await page.locator('#city-value').innerText(), 'İzmir');
+    assert.equal(await page.locator('#map-selection').innerText(), 'İzmir seçildi.');
     await page.locator('.project-card').nth(1).click();
     assert.equal(await page.locator('input[name=project]:checked').inputValue(), 'Ticari ve endüstriyel çatı GES');
     assert.equal(await page.locator('#selection-summary span').innerText(), 'İzmir · Ticari çatı');
-    await page.locator('#city-trigger').click();
+    await page.locator('#map-city-list').click();
     await page.locator('#city-search').fill('ankara');
     await closeCity(false);
     assert.equal(await page.locator('#city').inputValue(), 'İzmir');
-    await page.locator('#city-trigger').focus();
+    await page.locator('#map-city-list').focus();
     await page.keyboard.press('Enter');
     assert.equal(await dialog.evaluate(el => getComputedStyle(el).transitionDuration), '0s', 'keyboard dialog is instant');
     await page.locator('#city-search').press('ArrowDown');
@@ -112,10 +121,32 @@ try {
     assert.equal(whatsapp.searchParams.get('text'), message);
     assert.match(message, /İzmir.*Ticari ve endüstriyel çatı GES/);
     await page.locator('#edit-brief').click();
+    assert.equal(await page.locator('input[name=project]:checked').evaluate(el => el === document.activeElement), true);
     assert.equal(await page.locator('#city').inputValue(), 'İzmir');
     assert.equal(await page.locator('input[name=project]:checked').inputValue(), 'Ticari ve endüstriyel çatı GES');
+    // Both the map and its single list alternative update the same brief.
+    await page.locator('[data-province="Konya"]').click();
+    assert.equal(await page.locator('#selection-summary span').innerText(), 'Konya · Ticari çatı');
+    assert.equal(await page.locator('[data-province].is-selected').getAttribute('data-province'), 'Konya');
+    await page.locator('button.form-button').click();
+    assert.match(await page.locator('#brief-message').innerText(), /Konya.*Ticari ve endüstriyel çatı GES/);
+    await page.locator('#edit-brief').click();
+    // A showcase CTA sends missing-city visitors to the map, and existing-city
+    // visitors to their project choice, with the focused control on screen.
+    await page.goto(base, { waitUntil: 'networkidle' });
+    await page.locator('[data-apply-project="0"]').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#map-city-list').evaluate(el => el === document.activeElement), true);
+    let targetBox = await page.locator('#map-city-list').boundingBox();
+    assert.ok(targetBox.y >= 0 && targetBox.y + targetBox.height <= 1000, 'missing-city CTA focus is visible');
+    await page.locator('[data-province="Konya"]').click();
+    await page.locator('[data-apply-project="0"]').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('input[name=project]:checked').evaluate(el => el === document.activeElement), true);
+    targetBox = await page.locator('.project-card').first().boundingBox();
+    assert.ok(targetBox.y >= 0 && targetBox.y + targetBox.height <= 1000, 'project CTA focus is visible');
     await fits();
-    report.viewports.push({ width, overflow: false, columns: width >= 768 ? 2 : 1, cityDialog: { width: box.width, height: box.height, bottomSheet: width < 768 }, turkishSearch: true, cancellation: true, keyboard: true, message: true, rail: '32s; runs when visible; pauses offscreen' });
+    report.viewports.push({ width, overflow: false, columns: width >= 768 ? 2 : 1, singleCityPicker: true, mapBriefSync: true, projectCtaFocus: true, cityDialog: { width: box.width, height: box.height, bottomSheet: width < 768 }, turkishSearch: true, cancellation: true, keyboard: true, message: true, rail: '32s; runs when visible; pauses offscreen' });
     console.log(`${width}px passed`);
   }
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -126,7 +157,7 @@ try {
   assert.equal(await page.locator('.conveyor-object:visible').count(), 5);
   await fits();
   await page.locator('.production-line').screenshot({ path: `qa/${label}-reduced-rail.png` });
-  await page.locator('#city-trigger').click();
+  await page.locator('#map-city-list').click();
   assert.equal(await page.locator('#city-dialog').evaluate(el => getComputedStyle(el).transform), 'none');
   await closeCity();
   report.variants.reducedMotion = true;
@@ -134,13 +165,13 @@ try {
   const touch = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 3 });
   const mobile = await touch.newPage();
   await mobile.goto(base, { waitUntil: 'networkidle' });
-  await mobile.locator('#city-trigger').tap();
+  await mobile.locator('#map-city-list').tap();
   await mobile.locator('#city-search').fill('sanliurfa');
   await mobile.locator('.city-option').tap();
   await mobile.locator('#city-dialog').waitFor({ state: 'hidden' });
   await mobile.locator('.project-card').last().tap();
   assert.equal(await mobile.locator('#selection-summary span').innerText(), 'Şanlıurfa · Tarımsal sulama');
-  await mobile.locator('#city-trigger').tap();
+  await mobile.locator('#map-city-list').tap();
   await mobile.setViewportSize({ width: 390, height: 420 });
   await mobile.waitForTimeout(300);
   const small = await mobile.locator('#city-dialog').boundingBox();
@@ -151,6 +182,8 @@ try {
   const staticPage = await nojs.newPage();
   await staticPage.goto(base, { waitUntil: 'networkidle' });
   assert.equal(await staticPage.locator('#brief-form').isVisible(), false);
+  assert.equal(await staticPage.locator('#map-city-list').isVisible(), false);
+  assert.equal(await staticPage.locator('.location-phone').isVisible(), true);
   assert.equal(await staticPage.locator('.official-application a').isVisible(), true);
   assert.equal(await staticPage.locator('.conveyor-object:visible').count(), 5);
   assert.equal(await staticPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);

@@ -83,7 +83,7 @@ test('contact validates fields, creates a Turkish brief, preserves choices and n
   assert.equal(window.localStorage.length, 0);
   document.querySelector('#edit-brief').click();
   assert.equal(form.hidden, false); assert.equal(city.value, 'İzmir');
-  assert.equal(document.activeElement, document.querySelector('#city-trigger'));
+  assert.equal(document.activeElement, document.querySelector('input[name=project]:checked'));
   close();
 });
 test('video is requested only on click and unloaded when its dialog closes', () => {
@@ -180,7 +180,7 @@ test('without JavaScript the process descriptions and four advertising examples 
 
 test('city search matches Turkish and ASCII spelling and never commits unmatched text', () => {
   const { window, document, close } = setup();
-  const trigger = document.querySelector('#city-trigger'), search = document.querySelector('#city-search');
+  const trigger = document.querySelector('#map-city-list'), search = document.querySelector('#city-search');
   trigger.click();
   assert.equal(document.querySelector('#city-dialog').open, true);
   assert.equal(document.querySelectorAll('.city-option').length, 81);
@@ -195,14 +195,14 @@ test('city search matches Turkish and ASCII spelling and never commits unmatched
   search.value = 'izmir'; search.dispatchEvent(new window.Event('input'));
   search.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
   assert.equal(document.querySelector('#city').value, 'İzmir');
-  assert.equal(document.querySelector('#city-value').textContent, 'İzmir');
+  assert.equal(document.querySelector('#map-selection').textContent, 'İzmir seçildi.');
   assert.equal(document.querySelector('#city-dialog').open, false);
   assert.equal(document.activeElement, trigger);
   close();
 });
 test('city dialog cancellation retains the selected city and keyboard navigation stays within results', () => {
   const { window, document, close } = setup();
-  const city = document.querySelector('#city'), trigger = document.querySelector('#city-trigger');
+  const city = document.querySelector('#city'), trigger = document.querySelector('#map-city-list');
   city.value = 'İzmir'; city.dispatchEvent(new window.Event('change'));
   trigger.click();
   assert.equal(document.querySelector('.city-option[aria-pressed=true]').dataset.city, 'İzmir');
@@ -223,16 +223,25 @@ test('city dialog cancellation retains the selected city and keyboard navigation
 test('invalid form focuses city trigger, cards update the summary and editing keeps both choices', () => {
   const { window, document, close } = setup();
   const submit = () => document.querySelector('#brief-form').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
-  submit(); assert.equal(document.activeElement, document.querySelector('#city-trigger'));
-  assert.equal(document.querySelector('#city-trigger').getAttribute('aria-invalid'), 'true');
+  const trigger = document.querySelector('#map-city-list');
+  assert.equal(document.querySelectorAll('[aria-controls=city-dialog]').length, 1, 'one city search entry point');
+  assert.equal(trigger.closest('.region-map'), document.querySelector('.region-map'));
+  assert.equal(document.querySelector('#brief-form [aria-controls=city-dialog]'), null);
+  assert.equal(document.querySelector('#city').form, document.querySelector('#brief-form'), 'map selection is associated with the brief');
+  assert.ok(document.querySelector('.region-map #city-error'));
+  submit(); assert.equal(document.activeElement, trigger);
+  assert.equal(trigger.getAttribute('aria-describedby'), 'map-selection city-error');
+  assert.equal(document.querySelector('#map-city-list').getAttribute('aria-invalid'), 'true');
   const city = document.querySelector('#city');city.value = 'Ankara'; city.dispatchEvent(new window.Event('change'));
+  assert.equal(trigger.getAttribute('aria-describedby'), 'map-selection');
   submit(); assert.equal(document.activeElement, document.querySelector('input[name=project]'));
   document.querySelector('input[value="Tarımsal sulama GES"]').click();
   assert.equal(document.querySelector('#selection-summary span').textContent, 'Ankara · Tarımsal sulama');
   submit(); assert.match(document.querySelector('#brief-message').textContent, /Ankara.*Tarımsal sulama GES/);
   document.querySelector('#edit-brief').click();
   assert.equal(document.querySelector('input[name=project]:checked').value, 'Tarımsal sulama GES');
-  assert.equal(document.querySelector('#city-value').textContent, 'Ankara');
+  assert.equal(document.querySelector('#map-selection').textContent, 'Ankara seçildi.');
+  assert.equal(document.activeElement, document.querySelector('input[name=project]:checked'));
   close();
 });
 
@@ -266,7 +275,12 @@ test('advertising browsing is isolated; only the explicit CTA applies each canon
     tabs[index].click();button.click();
     assert.equal(document.querySelector('input[name=project]:checked').value,window.GridLogic.projects[index]);
     assert.equal(window.gridSelection.get().project,window.GridLogic.projects[index]);
-  });close();
+    assert.equal(document.activeElement,document.querySelector('#map-city-list'), 'missing city points to the map');
+  });
+  window.gridSelection.setCity('İstanbul');
+  document.querySelector('[data-apply-project]').click();
+  assert.equal(document.activeElement,document.querySelector('input[name=project]:checked'));
+  close();
 });
 test('process tabs expose exactly one panel and support arrow, Home and End navigation', () => {
   const { window, document, close } = setup();

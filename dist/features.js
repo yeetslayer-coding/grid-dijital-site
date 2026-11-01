@@ -46,12 +46,6 @@
     if (!province) return;
     selection.setCity(province.dataset.province);
   });
-  const mapList = document.querySelector('#map-city-list');
-  // Reuse the existing dialog and return focus to the actual opener.
-  mapList.addEventListener('click', event => {
-    editBriefIfNeeded();
-    document.dispatchEvent(new CustomEvent('grid:open-city', { detail:{ trigger:mapList, keyboard:event.detail===0 } }));
-  });
   selection.subscribe(state => {
     all('[data-province]').forEach(province => province.classList.toggle('is-selected', province.dataset.province === state.city));
     document.querySelector('#map-selection').textContent = state.city ? `${state.city} seçildi.` : 'Henüz şehir seçilmedi.';
@@ -59,9 +53,9 @@
   all('[data-apply-project]').forEach(button => button.addEventListener('click', event => {
     selection.setProject(window.GridLogic.projects[Number(button.dataset.applyProject)]);
     editBriefIfNeeded();
-    const target = selection.get().city ? document.querySelector('input[name=project]:checked') : document.querySelector('#city-trigger');
+    const target = selection.get().city ? document.querySelector('input[name=project]:checked') : document.querySelector('#map-city-list');
     const instant = event.detail === 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document.querySelector('#brief-form').scrollIntoView({ block:'start', behavior:instant ? 'instant' : 'smooth' });
+    target.scrollIntoView({ block:'center', behavior:instant ? 'instant' : 'smooth' });
     target.focus({ preventScroll:true });
   }));
 

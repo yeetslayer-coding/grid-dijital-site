@@ -220,16 +220,6 @@ html:has(body[data-input=keyboard]){scroll-behavior:auto}
 .brief-heading>p { color:var(--muted); font-size:13px; line-height:1.7; }
 .group-label,.project-field legend.group-label { font-size:13px; font-weight:500; line-height:1.6; }
 .group-number { display:inline-grid; place-items:center; font-size:9px; font-weight:500; color:var(--red); width:23px; height:23px; border:1px solid var(--glass-border); border-radius:50%; margin-right:6px; vertical-align:middle; }
-.city-field { gap:13px; margin-bottom:28px; }
-.city-trigger { display:flex; align-items:center; gap:14px; width:100%; min-height:82px; text-align:left; padding:14px 17px; border:1px solid var(--glass-border); background:linear-gradient(145deg,#fafaf9e6,#f4f4f2b3); border-radius:12px; box-shadow:inset 0 1px 0 #fafaf9; transition:border-color 140ms var(--ease),background-color 140ms var(--ease); }
-.city-marker { display:grid; place-items:center; width:42px; height:42px; border-radius:12px; background:var(--glass-chip); border:1px solid var(--glass-border); color:var(--red); flex-shrink:0; }
-.city-marker .icon { width:22px; height:22px; }
-.city-trigger-copy { min-width:0; display:flex; flex-direction:column; gap:3px; }
-.city-trigger-copy strong { font-family:Outfit,Arial,sans-serif; font-weight:500; font-size:20px; letter-spacing:-.02em; line-height:1.3; }
-.city-trigger-copy small { font-size:10px; line-height:1.5; color:var(--muted); }
-.city-chevron { margin-left:auto; width:18px; height:18px; color:var(--muted); }
-.city-trigger[aria-invalid=true] { border-color:var(--red); }
-.city-trigger.has-selection .city-trigger-copy strong { color:var(--red); }
 .selection-summary { display:flex; align-items:flex-start; gap:9px; min-height:40px; margin-top:22px; padding:13px 0 0; border-top:1px solid var(--glass-border); font-size:12px; line-height:1.7; color:var(--muted); }
 .selection-summary .icon { color:var(--red); width:18px; height:18px; margin-top:1px; }
 .selection-summary.has-selection { color:var(--ink); }
@@ -256,10 +246,9 @@ html:has(body[data-input=keyboard]){scroll-behavior:auto}
 .city-cancel { border:0; border-radius:6px; background:none; padding:10px 0 10px 20px; min-height:44px; font-size:13px; color:var(--ink); }
 @media(hover:hover) and (pointer:fine) {
  .project-option:hover .project-card { transform:translateY(-2px); border-color:#b9364366; }
- .city-trigger:hover { border-color:#b9364380; }
  .city-option:hover { background:#b936430a; }
 }
-body[data-input=keyboard] .project-card,body[data-input=keyboard] .city-trigger { transition:none; }
+body[data-input=keyboard] .project-card { transition:none; }
 @media(min-width:768px) and (max-width:1000px) {
  .contact { grid-template-columns:1fr; gap:32px; }
  .contact-copy>p:not(.eyebrow) { max-width:500px; }
@@ -273,10 +262,6 @@ body[data-input=keyboard] .project-card,body[data-input=keyboard] .city-trigger 
  .contact-panel .brief-heading h3 { font-size:30px; }
  .brief-heading { padding-bottom:22px; margin-bottom:22px; }
  .brief-heading>p { font-size:13px; }
- .city-trigger { padding:13px; gap:11px; }
- .city-marker { width:38px; height:38px; }
- .city-trigger-copy strong { font-size:20px; }
- .city-trigger-copy small { font-size:10px; }
  .project-options { grid-template-columns:1fr; gap:10px; }
  .project-options .project-card { display:grid; grid-template-columns:82px 1fr; align-items:center; gap:12px; min-height:120px; padding:13px 32px 13px 10px; }
  .project-art { width:82px; height:86px; margin:0; }
@@ -300,8 +285,6 @@ body[data-input=keyboard] .project-card,body[data-input=keyboard] .city-trigger 
 @media(max-width:359px) {
  .contact-panel { padding-inline:16px; }
  .contact-panel .brief-heading h3 { font-size:27px; }
- .city-trigger-copy strong { font-size:18px; }
- .city-trigger-copy small { font-size:9px; }
  .project-options .project-card { grid-template-columns:64px 1fr; gap:9px; padding-right:25px; }
  .project-art { width:64px; }
  .project-art img { width:70px; height:70px; }
@@ -312,7 +295,7 @@ body[data-input=keyboard] .project-card,body[data-input=keyboard] .city-trigger 
 }
 @media(prefers-reduced-motion:reduce) {
  .project-option:hover .project-card { transform:none; }
- .project-card,.city-trigger { transition:border-color 140ms var(--ease),background-color 140ms var(--ease); }
+ .project-card { transition:border-color 140ms var(--ease),background-color 140ms var(--ease); }
  .city-dialog,.city-dialog[open] { transform:none; }
  .conveyor-group { gap:28px 24px; }
  .panel-unit { width:154px; height:112px; }
