@@ -1,0 +1,20 @@
+{
+  "repository": "https://github.com/yeetslayer-coding/grid-dijital-site",
+  "visibility": "public",
+  "commit": "19b9173dd100c655cf8247d4bdde077a8c03a05f",
+  "anonymousZip": {
+    "status": 200,
+    "bytes": 2568669,
+    "requiredFiles": true,
+    "noLocalSecretsOrDependencies": true
+  },
+  "cleanClone": {
+    "npmCi": "passed",
+    "syntax": "passed",
+    "tests": 21,
+    "localHttp": 200,
+    "sourceMatches": true
+  },
+  "platform": "macOS; Windows batch not executed",
+  "status": "passed"
+}
