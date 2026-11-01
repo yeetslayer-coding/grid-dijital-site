@@ -1,0 +1,38 @@
+{
+  "url": "http://localhost:4317",
+  "browser": "151.0.7922.34",
+  "widths": [
+    {
+      "width": 320,
+      "options": true,
+      "keyboard": true,
+      "contact": true,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "options": true,
+      "keyboard": true,
+      "contact": true,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "options": true,
+      "keyboard": true,
+      "contact": true,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "options": true,
+      "keyboard": true,
+      "contact": true,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "reducedMotion": true,
+  "noJavaScriptContact": true,
+  "status": "passed"
+}

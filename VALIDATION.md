@@ -70,3 +70,11 @@ A source comparison confirms HTML outside the production-line section is byte-id
 ### Live vector release
 
 Deployment `dpl_CHXip7Ymbt46kEbiCHUCj4qEXGzn`, source commit `8252fb969902365fcfa5978ceb92eb1d0a685b11`, reached READY at https://grid-dijital-studio.vercel.app. Live Chromium checks passed at 390px and 1440px with no page/console errors or horizontal overflow, including the loop-boundary position check, offscreen pausing, reduced motion, no JavaScript and existing contact interactions. The live rail screenshots were visually reviewed at both widths. `verification/vector-rail-live-browser.json` records results; `verification/vector-rail-live-assets.json` confirms HTTP 200 and byte equality for HTML, CSS, both scripts and all five SVGs.
+
+## Perakende reference, contact card and design options — 2026-11-01
+
+Read the actual Perakende `production-line.tsx` and location-card source, then captured the live reference rail and location card in Chromium. Its 176 × 112px parcels and 420px location card informed the two isolated rail options and the Grid contact layout. Reference and candidate screenshots were visually compared.
+
+All 14 existing tests, JavaScript syntax checks and whitespace validation passed. `scripts/design-options-qa.mjs` passed on real Chromium 151.0.7922.34 at 320, 390, 768 and 1440px: both variants render without overflow, tab clicks/arrow keys select exactly one variant and retain focus, each rail runs for 32 seconds, reduced motion is static, and the contact card/map/phone work without JavaScript. Map destination resolves the existing street/door in Keşan; phone link remains `tel:+905515062980`. Both contact actions have at least 44px height. No phone call, message or map navigation was initiated. Zero page/console errors. Portable report: `verification/design-options-browser.json`.
+
+The comparison is a separate route; the main rail awaits the user's choice. The location/telephone changes are ready for publication. Source Perakende files remain unmodified. Browser-emulated widths are not physical-device/Safari evidence.

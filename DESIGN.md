@@ -46,3 +46,9 @@ The contact panel retains its heading and local-only two-field brief. A numbered
 City search is a fixed-height compact desktop dialog and a mobile bottom sheet. Filtering preserves the window height. Turkish case and diacritics are normalized for ASCII search; only canonical city-list values are committed. Escape, backdrop and cancel retain the previous choice. Native dialog owns focus containment; Arrow keys/Home/End navigate results, unique-result Enter selects, and closing returns focus to the trigger. Search has no network dependency. No backend or persistent state is added.
 
 Cards and the city trigger use 140ms response. The city dialog uses the existing 250ms curve; keyboard-initiated transitions are instant. Reduced motion removes positional transitions. No-JavaScript preserves official contact and the static five-stage rail. Selection-card WebP images remain unchanged; rail SVGs are a separate family. Asset provenance is in ASSETS.md.
+
+## Contact placement and rail comparison
+
+The contact-copy column now uses Perakende's location-card structure and measurements: 420px maximum width, 22/24px padding, 44px location marker, 25px location heading, 14px address and a 48px map link. Grid red replaces Perakende blue. A labelled telephone row sits within this card, beneath the map action; the free-standing number is removed. Footer location is a compact link back to the card. The address and telephone are Grid's existing values.
+
+`/ray-ornekleri/` is an isolated, working comparison page. “Proje dosyaları” uses small labelled project folders, source-scale 176 × 112px parts and one red stage; “Panel yüzeyleri” uses thin-framed solar modules with integrated stage labels. Both retain the original rail, rollers, 32-second loop and reduced-motion/offscreen behavior. The switch is instant and keyboard-accessible. These choices are not imported into the main rail until the user selects one.
