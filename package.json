@@ -3,11 +3,16 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "python3 -m http.server 4317 --directory dist",
+    "dev": "sirv dist --dev --host 127.0.0.1 --port 4317",
     "check": "node --check dist/selection.js && node --check dist/app.js && node --check dist/features.js && node --check dist/grid-motion.js",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "start": "npm run dev"
   },
   "devDependencies": {
-    "jsdom": "^26.1.0"
+    "jsdom": "^26.1.0",
+    "sirv-cli": "3.0.1"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

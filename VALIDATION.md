@@ -160,3 +160,12 @@ JavaScript syntax checks, all 21 existing interaction/rule tests and whitespace 
 ### Live integrated city field
 
 Deployment `dpl_crdevykYNiQF9w4GrFuzAMfADZZt` (source `b7dc226db0d17bdbf1a9e1689666c3143106db5c`) is READY at https://grid-dijital-studio.vercel.app; immutable release https://grid-dijital-studio-qfhn8c1qb-g-class.vercel.app. Live Chromium checks passed at 390px and 1440px, verifying the visible field value and highlighted province after both list selection and a real map click. Search, cancellation, keyboard/return focus, validation and the shared brief/WhatsApp flow also pass, without overflow or page/console errors. Live mobile and desktop selected-map screenshots were visually reviewed. Reduced-motion, touch-emulation and no-JavaScript alternatives remain functional. `verification/map-city-field-live-browser.json` records results; `verification/map-city-field-live-assets.json` verifies all seven checked HTML/CSS/JS files match the tested source byte-for-byte. No message, application or external form was submitted.
+
+
+## GitHub / second-computer handoff — 2026-11-01
+
+Replaced the Python-only development command with pinned `sirv-cli@3.0.1`, serving only `dist/` on `127.0.0.1:4317`. Added a Windows `SITEYI-AC.cmd` launcher with first-run `npm ci`, error handling and CRLF checkout configuration, plus Turkish ZIP/clone/update instructions. The static website files and deployed Vercel version are unchanged.
+
+Syntax checks, all 21 interaction/rule tests and `npm audit` passed (zero reported vulnerabilities). A Chromium smoke test using the new Node-based local server confirmed local fonts/images/SVG delivery, actual map selection, city search, shared brief values, and no page/console errors or horizontal overflow. Requests for `.env.local` and `package.json` return 404, and the listener was verified to bind only 127.0.0.1. Evidence: `verification/github-handoff-browser.json`. The Windows batch launcher was source-reviewed; actual execution was on macOS, so Windows-device testing is not claimed.
+
+Before first GitHub publication, 216 historical blobs were checked for common credential/private-key patterns; no matches or tracked secret-file paths were found. Ignored local environment files, dependencies and QA output remain outside Git. Repository visibility is public for the requested account-free link/ZIP handoff; no GitHub invitation or message was sent to another person.
