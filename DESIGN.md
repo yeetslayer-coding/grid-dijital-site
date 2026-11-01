@@ -20,7 +20,7 @@ Paper grain is copied from the source. Solar modules, roof structures, wiring an
 
 ## Composition and content
 
-Hero pairs the Grid message with a glass browser frame containing a generated solar scene. The inline panel/cursor image punctuates the headline. Scene alt text and caption explicitly identify it as representative. The source conveyor geometry now carries Bölge → Reklam → Başvuru → Keşif → Teklif. Its visible pause control is reversible.
+Hero pairs the Grid message with a glass browser frame containing a generated solar scene. The inline panel/cursor image punctuates the headline. Scene alt text and caption explicitly identify it as representative. The source conveyor geometry now carries Bölge → Reklam → Başvuru → Keşif → Teklif. Each stage now carries a generated transparent 3D object; there is no pause button. Objects share a visual floor line and aligned HTML stage captions.
 
 Four process tabs use light selected surfaces on a red section. All initialized panels share one CSS grid cell, so even inactive panels contribute to the common height. Inactive panels have hidden, inert, aria-hidden and tabindex=-1. Without JavaScript, all four descriptions appear sequentially.
 
@@ -32,8 +32,17 @@ Native CSS/JavaScript only. Shared curve `cubic-bezier(.23,1,.32,1)`. Button res
 
 Grid port preserves fixed intersections and gently displaced quadratic control points: mass 1, stiffness 100, damping 10; visible midpoint displacement at most 6px. 30fps on fine pointers, 24fps on coarse pointers, DPR cap 1.5. Offscreen surfaces are not painted. Hidden documents cancel the animation frame. One controller owns both canvases, observers and lifecycle cleanup.
 
-Conveyor travels for 32 seconds per loop; rollers rotate every 2 seconds. User pause and hidden-document state pause CSS animation. Reduced motion displays a static wrapped five-stage band, fixed grid and immediate reveals; positional hover animation is disabled. The no-JavaScript version is also static and offers direct YouTube links and the official contact route.
+Conveyor travels for 32 seconds per loop; rollers rotate every 2 seconds. An IntersectionObserver pauses the conveyor outside the viewport; hidden-document state also pauses CSS animation. Reduced motion displays a static wrapped five-stage band, fixed grid and immediate reveals; positional hover animation is disabled. The no-JavaScript version is also static and offers direct YouTube links and the official contact route.
 
 ## Delivery boundary
 
-The existing owner-private Grid Site is the deployment target. Keep noindex/nofollow. Do not change griddijital.com, DNS, site access or the Perakende checkout. Browser and behavioral evidence is recorded in VALIDATION.md; generated-asset prompts and licenses in ASSETS.md.
+The active deployment target is `g-class/grid-dijital-studio` at https://grid-dijital-studio.vercel.app. The earlier owner-private ChatGPT Site remains a separate previous preview. Keep noindex/nofollow. Do not change griddijital.com, DNS, site access or the Perakende checkout. Browser and behavioral evidence is recorded in VALIDATION.md; generated-asset prompts and licenses in ASSETS.md.
+
+
+## Visual selection and city search
+
+The contact panel retains its heading and local-only two-field brief. A numbered city group opens a native dialog with an 81-city search. A numbered project group uses native radio inputs styled as image cards: two columns at desktop/tablet, one column below 768px. Each card has a realistic miniature, short explanation and a visible selected check. Selected city/project appear in a live summary before the unchanged primary action.
+
+City search is a fixed-height compact desktop dialog and a mobile bottom sheet. Filtering preserves the window height. Turkish case and diacritics are normalized for ASCII search; only canonical city-list values are committed. Escape, backdrop and cancel retain the previous choice. Native dialog owns focus containment; Arrow keys/Home/End navigate results, unique-result Enter selects, and closing returns focus to the trigger. Search has no network dependency. No backend or persistent state is added.
+
+Cards and the city trigger use 140ms response. The city dialog uses the existing 250ms curve; keyboard-initiated transitions are instant. Reduced motion removes positional transitions. No-JavaScript preserves official contact and the static five-stage rail. Image prompts and transparent WebP provenance are in ASSETS.md.

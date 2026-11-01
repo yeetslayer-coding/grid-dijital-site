@@ -12,7 +12,7 @@
 
 ## Real-browser verification
 
-Chromium 151.0.7922.34, headless, through the existing local Playwright installation. This is actual browser rendering, separate from jsdom tests. Runner: `scripts/browser-qa.mjs`. Portable results: `verification/browser-report.json`. Screenshots: local ignored `qa/` folder.
+Chromium 151.0.7922.34, headless, through the existing local Playwright installation. This is actual browser rendering, separate from jsdom tests. Runner at the visual-transfer revision: `scripts/browser-qa.mjs`. Portable results: `verification/browser-report.json`. Screenshots: local ignored `qa/` folder.
 
 | Width | Horizontal overflow | Four process-panel heights | Glass blur |
 | --- | --- | --- | --- |
@@ -38,4 +38,17 @@ Additional browser checks passed:
 
 ## Scope and limits
 
-This verifies local Chromium behavior and screenshots. Physical iOS/Android devices, Safari and actual YouTube playback remain outside this run. No audience change, DNS change or griddijital.com deployment is part of this work. The private Grid preview keeps noindex/nofollow. Native Sites deployment status is checked separately after packaging.
+This verifies local Chromium behavior and screenshots. Physical iOS/Android devices, Safari and actual YouTube playback remain outside this run. No audience change, DNS change or griddijital.com deployment is part of this work. The private Grid preview keeps noindex/nofollow. This earlier visual-transfer evidence predates the Vercel migration; current delivery is documented below.
+
+
+## Illustrated selection and 3D GES conveyor — 2026-11-01
+
+The final selection/rail changes passed `npm run check` and all 14 `npm test` cases. The former pause-button case now verifies its absence, ten objects for a seamless loop, offscreen suspension and hidden-document suspension. New city tests cover Turkish/ASCII matching, unmatched queries, canonical-value commits, cancel preservation, arrow navigation, invalid-field focus, live selection summary and the existing exact WhatsApp message handoff.
+
+Actual Chromium 151.0.7922.34 browser checks passed at 320, 390, 768 and 1440px using `scripts/browser-qa.mjs`. Results: `verification/selection-rail-browser.json`. Screenshots in ignored `qa/selection-rail-*-{form,city,rail}.png` were visually reviewed. No horizontal overflow or browser errors occurred. Project cards use one column at 320/390 and two at 768/1440. Captions align across the object family; transparent objects share the rail baseline. City dialogs fit the viewport: 320/390px bottom sheets are 620px high; desktop/tablet windows are 460 × 590px. Search does not change the window height.
+
+Verified in the browser: 81 city results, `istanbul`, `İZMİR`, `sanliurfa` and `AGRI` matching, explicit empty state, unique-result Enter selection, cancel/Escape preserving the old value, arrow/Home/End navigation, modal focus containment/return and instant keyboard opening. The selected project/city appear in the summary and reviewable WhatsApp brief; editing retains them. No message was sent.
+
+The computed conveyor animation runs for 32s when visible and pauses offscreen. Reduced motion displays exactly five static stages. JavaScript disabled at 320px retains the five static objects and the official application route while hiding the interactive form. Touch emulation at 390px supports city/project selection; a 420px-high viewport keeps the city sheet inside the screen. Native video keyboard/Escape behavior still passes with external video transport stubbed. All eight 512px WebP assets have verified transparency; source paths and alpha readback are in `verification/ges-assets.json`.
+
+Limits: Chromium touch emulation is not a physical phone test. Safari, physical devices and real YouTube playback were not tested. The existing source visual-transfer/blur-fallback evidence above remains separate from this scoped change. The Vercel release and live browser evidence are recorded separately after deployment; griddijital.com and DNS are unchanged.

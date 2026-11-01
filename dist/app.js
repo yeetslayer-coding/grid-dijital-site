@@ -88,31 +88,136 @@
   const result = document.querySelector('#brief-result');
   const cityError = document.querySelector('#city-error');
   const projectError = document.querySelector('#project-error');
-  citySelect.addEventListener('change', () => { cityError.hidden = true; citySelect.removeAttribute('aria-invalid'); });
-  all('input[name=project]').forEach(input => input.addEventListener('change', () => { projectError.hidden = true; all('input[name=project]').forEach(item => { item.removeAttribute('aria-invalid'); item.removeAttribute('aria-describedby'); }); }));
+  const cityTrigger = document.querySelector('#city-trigger');
+  const cityDialog = document.querySelector('#city-dialog');
+  const citySearch = document.querySelector('#city-search');
+  const cityResults = document.querySelector('#city-results');
+  const cityEmpty = cityDialog.querySelector('.city-empty');
+  const cityCount = document.querySelector('#city-result-count');
+  const summary = document.querySelector('#selection-summary');
+  const normalizeCity = value => value.trim().toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i');
+
+  function updateSelection() {
+    const selected = form.querySelector('input[name=project]:checked');
+    document.querySelector('#city-value').textContent = citySelect.value || 'Şehrinizi seçin';
+    cityTrigger.classList.toggle('has-selection', !!citySelect.value);
+    summary.classList.toggle('has-selection', !!citySelect.value || !!selected);
+    summary.querySelector('span').textContent = citySelect.value || selected
+      ? `${citySelect.value || 'Şehir seçin'} · ${selected?.closest('label').querySelector('strong').textContent || 'Proje türü seçin'}`
+      : 'Şehir ve proje türünü seçin.';
+  }
+  function cityMotion(event) {
+    cityDialog.toggleAttribute('data-instant', event.detail === 0 || event.type === 'cancel' || document.body.dataset.input === 'keyboard');
+  }
+  function focusCity(index) {
+    const buttons = all('.city-option', cityResults);
+    if (!buttons.length) return;
+    const next = Math.max(0, Math.min(index, buttons.length - 1));
+    buttons.forEach((button, n) => { button.tabIndex = n === next ? 0 : -1; });
+    buttons[next].focus();
+    buttons[next].scrollIntoView?.({ block: 'nearest', behavior: 'instant' });
+  }
+  function renderCities() {
+    const query = normalizeCity(citySearch.value);
+    const matches = cities.filter(city => normalizeCity(city).includes(query));
+    const selectedIndex = Math.max(0, matches.indexOf(citySelect.value));
+    const fragment = document.createDocumentFragment();
+    matches.forEach((city, index) => {
+      const item = document.createElement('li');
+      const button = document.createElement('button');
+      const name = document.createElement('span');
+      const check = document.createElement('i');
+      name.textContent = city;
+      check.className = 'icon'; check.setAttribute('aria-hidden', 'true');
+      check.style.setProperty('--icon-url', "url('/assets/icons/check.svg')");
+      button.className = 'city-option'; button.type = 'button'; button.dataset.city = city;
+      button.tabIndex = index === selectedIndex ? 0 : -1;
+      button.setAttribute('aria-pressed', String(city === citySelect.value));
+      button.append(name, check); item.append(button); fragment.append(item);
+    });
+    cityResults.replaceChildren(fragment);
+    cityResults.scrollTop = 0;
+    cityEmpty.hidden = matches.length > 0;
+    cityResults.hidden = matches.length === 0;
+    cityCount.textContent = matches.length ? `${matches.length} şehir` : 'Sonuç bulunamadı';
+  }
+  cityTrigger.addEventListener('click', event => {
+    cityMotion(event);
+    citySearch.value = '';
+    renderCities();
+    cityDialog.showModal();
+    cityTrigger.setAttribute('aria-expanded', 'true');
+    citySearch.focus();
+  });
+  citySearch.addEventListener('input', renderCities);
+  citySearch.addEventListener('keydown', event => {
+    if (event.isComposing) return;
+    const buttons = all('.city-option', cityResults);
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault(); focusCity(event.key === 'ArrowDown' ? 0 : buttons.length - 1);
+    } else if (event.key === 'Enter' && buttons.length === 1) {
+      event.preventDefault(); buttons[0].click();
+    }
+  });
+  cityResults.addEventListener('keydown', event => {
+    const index = all('.city-option', cityResults).indexOf(event.target);
+    if (index < 0) return;
+    let next;
+    if (event.key === 'ArrowDown') next = index + 1;
+    if (event.key === 'ArrowUp') next = index - 1;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = cityResults.children.length - 1;
+    if (next !== undefined) { event.preventDefault(); focusCity(next); }
+  });
+  cityResults.addEventListener('click', event => {
+    const button = event.target.closest('.city-option');
+    if (!button || !cities.includes(button.dataset.city)) return;
+    cityMotion(event);
+    citySelect.value = button.dataset.city;
+    citySelect.dispatchEvent(new Event('change', { bubbles: true }));
+    cityDialog.close();
+  });
+  all('.city-close,.city-cancel', cityDialog).forEach(button => button.addEventListener('click', event => { cityMotion(event); cityDialog.close(); }));
+  cityDialog.addEventListener('cancel', cityMotion);
+  cityDialog.addEventListener('close', () => {
+    if (cityDialog.open) return;
+    cityTrigger.setAttribute('aria-expanded', 'false');
+    cityTrigger.focus();
+  });
+  cityDialog.addEventListener('click', event => {
+    if (event.target !== cityDialog) return;
+    const rect = cityDialog.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) { cityMotion(event); cityDialog.close(); }
+  });
+  citySelect.addEventListener('change', () => { cityError.hidden = true; citySelect.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-describedby'); updateSelection(); });
+  all('input[name=project]').forEach(input => input.addEventListener('change', () => { projectError.hidden = true; all('input[name=project]').forEach(item => { item.removeAttribute('aria-invalid'); item.removeAttribute('aria-describedby'); }); updateSelection(); }));
   form.addEventListener('submit', event => {
     event.preventDefault();
     const project = form.querySelector('input[name=project]:checked');
     const city = citySelect.value;
     cityError.hidden = !!city; projectError.hidden = !!project;
     citySelect.setAttribute('aria-invalid', String(!city));
+    cityTrigger.setAttribute('aria-invalid', String(!city));
+    if (!city) cityTrigger.setAttribute('aria-describedby', 'city-error');
+    else cityTrigger.removeAttribute('aria-describedby');
     all('input[name=project]').forEach(input => { input.setAttribute('aria-invalid', String(!project)); if (!project) input.setAttribute('aria-describedby', 'project-error'); });
-    if (!city || !project) { (!city ? citySelect : form.querySelector('input[name=project]')).focus(); return; }
+    if (!city || !project) { (!city ? cityTrigger : form.querySelector('input[name=project]')).focus(); return; }
     const message = `Merhaba Grid Dijital, ${city} bölgesinde ${project.value} alanında müşteri kazanımı için görüşmek istiyorum. Bölgesel Talep Sistemi'nin firmamıza uygunluğunu birlikte değerlendirebilir miyiz?`;
     document.querySelector('#brief-message').textContent = message;
     document.querySelector('#whatsapp-link').href = `https://wa.me/905515062980?text=${encodeURIComponent(message)}`;
     form.hidden = true; result.hidden = false; result.focus();
   });
-  document.querySelector('#edit-brief').addEventListener('click', () => { result.hidden = true; form.hidden = false; citySelect.focus(); });
+  document.querySelector('#edit-brief').addEventListener('click', () => { result.hidden = true; form.hidden = false; cityTrigger.focus(); });
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const production = document.querySelector('.production-line');
-  const motionToggle = production.querySelector('.motion-toggle');
-  motionToggle.addEventListener('click', () => {
-    const paused = production.classList.toggle('is-paused');
-    motionToggle.setAttribute('aria-pressed', String(paused));
-    motionToggle.textContent = paused ? 'Bandı oynat' : 'Bandı durdur';
-  });
+  if ('IntersectionObserver' in window) {
+    production.classList.add('is-offscreen');
+    const conveyorObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => production.classList.toggle('is-offscreen', !entry.isIntersecting));
+    });
+    conveyorObserver.observe(production);
+  }
   if ('IntersectionObserver' in window && !reduced.matches) {
     document.documentElement.classList.add('js-reveal');
     const observer = new IntersectionObserver(entries => {

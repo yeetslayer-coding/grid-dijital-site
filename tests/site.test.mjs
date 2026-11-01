@@ -9,9 +9,10 @@ function setup(options = {}) {
   const { window } = dom;
   window.matchMedia = options.matchMedia || (() => ({ matches: false, addEventListener() {} }));
   if (options.IntersectionObserver) window.IntersectionObserver = options.IntersectionObserver;
-  const dialog = window.document.querySelector('dialog');
-  dialog.showModal = function () { this.open = true; };
-  dialog.close = function () { this.open = false; this.dispatchEvent(new window.Event('close')); };
+  window.document.querySelectorAll('dialog').forEach(dialog => {
+    dialog.showModal = function () { this.open = true; };
+    dialog.close = function () { this.open = false; this.dispatchEvent(new window.Event('close')); };
+  });
   window.eval(script);
   return { window, document: window.document, close: () => window.close() };
 }
@@ -81,7 +82,7 @@ test('contact validates fields, creates a Turkish brief, preserves choices and n
   assert.equal(window.localStorage.length, 0);
   document.querySelector('#edit-brief').click();
   assert.equal(form.hidden, false); assert.equal(city.value, 'İzmir');
-  assert.equal(document.activeElement, city);
+  assert.equal(document.activeElement, document.querySelector('#city-trigger'));
   close();
 });
 test('video is requested only on click and unloaded when its dialog closes', () => {
@@ -89,13 +90,13 @@ test('video is requested only on click and unloaded when its dialog closes', () 
   assert.equal(document.querySelectorAll('iframe').length, 0);
   const button = document.querySelector('[data-video]');
   button.click();
-  assert.equal(document.querySelector('dialog').open, true);
-  assert.equal(document.querySelector('dialog').hasAttribute('data-instant'), true, 'keyboard activation is instant');
+  assert.equal(document.querySelector('#video-dialog').open, true);
+  assert.equal(document.querySelector('#video-dialog').hasAttribute('data-instant'), true, 'keyboard activation is instant');
   assert.match(document.querySelector('iframe').src, /youtube-nocookie\.com\/embed\/j4m6kfkmXHY/);
   assert.equal(document.querySelector('#video-title').textContent, 'Suntep Solar');
   document.querySelector('.close-dialog').click();
   assert.equal(document.querySelectorAll('iframe').length, 0);
-  assert.equal(document.querySelector('dialog').open, false);
+  assert.equal(document.querySelector('#video-dialog').open, false);
   assert.equal(document.activeElement, button);
   close();
 });
@@ -121,23 +122,29 @@ test('all local assets, anchor destinations, labels and ARIA relationships resol
   close();
 });
 
-test('conveyor pause control preserves its accessible state', () => {
-  const { document, close } = setup();
-  const button = document.querySelector('.motion-toggle');
-  button.click();
-  assert.equal(button.getAttribute('aria-pressed'), 'true');
-  assert.ok(document.querySelector('.production-line').classList.contains('is-paused'));
-  assert.equal(button.textContent, 'Bandı oynat');
-  button.click();
-  assert.equal(button.getAttribute('aria-pressed'), 'false');
-  assert.equal(button.textContent, 'Bandı durdur');
+test('conveyor has GES objects, no pause control, and pauses offscreen or in a hidden tab', () => {
+  let callback;
+  class Observer { constructor(cb) { callback = cb; } observe() {} disconnect() {} }
+  const { window, document, close } = setup({ IntersectionObserver: Observer, matchMedia: () => ({ matches: true, addEventListener() {} }) });
+  const conveyor = document.querySelector('.production-line');
+  assert.equal(document.querySelector('.motion-toggle'), null);
+  assert.equal(document.querySelector('.parcel'), null);
+  assert.equal(document.querySelectorAll('.conveyor-object').length, 10);
+  assert.ok(conveyor.classList.contains('is-offscreen'));
+  callback([{ target: conveyor, isIntersecting: true }]);
+  assert.equal(conveyor.classList.contains('is-offscreen'), false);
+  callback([{ target: conveyor, isIntersecting: false }]);
+  assert.ok(conveyor.classList.contains('is-offscreen'));
+  Object.defineProperty(document, 'hidden', { value: true, configurable: true });
+  document.dispatchEvent(new window.Event('visibilitychange'));
+  assert.ok(document.body.classList.contains('is-hidden'));
   close();
 });
 test('reveal observer staggers by 75ms, runs once, and releases all content when reduced motion is requested', () => {
   let callback, preference, disconnected = false; const observed = [], released = [];
   class Observer {
     constructor(cb) { callback = cb; }
-    observe(el) { observed.push(el); }
+    observe(el) { if (el.matches('.reveal')) observed.push(el); }
     unobserve(el) { released.push(el); }
     disconnect() { disconnected = true; }
   }
@@ -161,4 +168,62 @@ test('without JavaScript all four process descriptions remain accessible and eac
   assert.ok(document.querySelector('noscript style'), 'noscript style must be actual HTML, not escaped text');
   assert.ok(document.querySelector('.official-application a').href.includes('griddijital.com'));
   dom.window.close();
+});
+
+test('city search matches Turkish and ASCII spelling and never commits unmatched text', () => {
+  const { window, document, close } = setup();
+  const trigger = document.querySelector('#city-trigger'), search = document.querySelector('#city-search');
+  trigger.click();
+  assert.equal(document.querySelector('#city-dialog').open, true);
+  assert.equal(document.querySelectorAll('.city-option').length, 81);
+  for (const [query, city] of [['istanbul', 'İstanbul'], ['İZMİR', 'İzmir'], ['sanliurfa', 'Şanlıurfa'], ['AGRI', 'Ağrı'], [' IĞDIR ', 'Iğdır']]) {
+    search.value = query; search.dispatchEvent(new window.Event('input'));
+    assert.deepEqual([...document.querySelectorAll('.city-option')].map(el => el.dataset.city), [city]);
+  }
+  search.value = 'Atlantis'; search.dispatchEvent(new window.Event('input'));
+  assert.equal(document.querySelectorAll('.city-option').length, 0);
+  assert.equal(document.querySelector('.city-empty').hidden, false);
+  assert.equal(document.querySelector('#city').value, '');
+  search.value = 'izmir'; search.dispatchEvent(new window.Event('input'));
+  search.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+  assert.equal(document.querySelector('#city').value, 'İzmir');
+  assert.equal(document.querySelector('#city-value').textContent, 'İzmir');
+  assert.equal(document.querySelector('#city-dialog').open, false);
+  assert.equal(document.activeElement, trigger);
+  close();
+});
+test('city dialog cancellation retains the selected city and keyboard navigation stays within results', () => {
+  const { window, document, close } = setup();
+  const city = document.querySelector('#city'), trigger = document.querySelector('#city-trigger');
+  city.value = 'İzmir'; city.dispatchEvent(new window.Event('change'));
+  trigger.click();
+  assert.equal(document.querySelector('.city-option[aria-pressed=true]').dataset.city, 'İzmir');
+  const search = document.querySelector('#city-search');
+  search.value = 'an'; search.dispatchEvent(new window.Event('input'));
+  search.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+  const buttons = [...document.querySelectorAll('.city-option')];
+  assert.equal(document.activeElement, buttons[0]);
+  buttons[0].dispatchEvent(new window.KeyboardEvent('keydown', { key: 'End', bubbles: true, cancelable: true }));
+  assert.equal(document.activeElement, buttons.at(-1));
+  document.querySelector('.city-cancel').click();
+  assert.equal(city.value, 'İzmir'); assert.equal(document.activeElement, trigger);
+  assert.equal(trigger.getAttribute('aria-expanded'), 'false');
+  trigger.click(); assert.equal(search.value, '');
+  assert.equal(document.querySelectorAll('.city-option').length, 81);
+  close();
+});
+test('invalid form focuses city trigger, cards update the summary and editing keeps both choices', () => {
+  const { window, document, close } = setup();
+  const submit = () => document.querySelector('#brief-form').dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  submit(); assert.equal(document.activeElement, document.querySelector('#city-trigger'));
+  assert.equal(document.querySelector('#city-trigger').getAttribute('aria-invalid'), 'true');
+  const city = document.querySelector('#city');city.value = 'Ankara'; city.dispatchEvent(new window.Event('change'));
+  submit(); assert.equal(document.activeElement, document.querySelector('input[name=project]'));
+  document.querySelector('input[value="Tarımsal sulama GES"]').click();
+  assert.equal(document.querySelector('#selection-summary span').textContent, 'Ankara · Tarımsal sulama');
+  submit(); assert.match(document.querySelector('#brief-message').textContent, /Ankara.*Tarımsal sulama GES/);
+  document.querySelector('#edit-brief').click();
+  assert.equal(document.querySelector('input[name=project]:checked').value, 'Tarımsal sulama GES');
+  assert.equal(document.querySelector('#city-value').textContent, 'Ankara');
+  close();
 });

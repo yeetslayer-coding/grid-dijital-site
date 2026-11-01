@@ -1,0 +1,90 @@
+[
+  {
+    "name": "region",
+    "source": "/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/exec-f1bc35d2-7d91-4f77-9f2e-f0f413b15cef.png",
+    "output": "/Users/yigit/Documents/ChatGPT/grid dijital/grid-dijital-site/dist/assets/ges-objects/region.webp",
+    "size": 37760,
+    "alpha": true,
+    "bottom_padding_ratio": 0.099609375,
+    "minimumAlpha": 0,
+    "maximumAlpha": 254,
+    "transparentPixels": 154591
+  },
+  {
+    "name": "advertising",
+    "source": "/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/exec-49729057-52ea-44df-8322-dbecf80ee45f.png",
+    "output": "/Users/yigit/Documents/ChatGPT/grid dijital/grid-dijital-site/dist/assets/ges-objects/advertising.webp",
+    "size": 27906,
+    "alpha": true,
+    "bottom_padding_ratio": 0.02734375,
+    "minimumAlpha": 0,
+    "maximumAlpha": 254,
+    "transparentPixels": 173382
+  },
+  {
+    "name": "application",
+    "source": "/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/exec-48e9bf4c-e76c-4f5e-9f4d-2b41c1fbbcc8.png",
+    "output": "/Users/yigit/Documents/ChatGPT/grid dijital/grid-dijital-site/dist/assets/ges-objects/application.webp",
+    "size": 29574,
+    "alpha": true,
+    "bottom_padding_ratio": 0.013671875,
+    "minimumAlpha": 0,
+    "maximumAlpha": 254,
+    "transparentPixels": 124816
+  },
+  {
+    "name": "villa",
+    "source": "/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/exec-9fb39b00-5c80-4d30-80a4-8ee582fb32a7.png",
+    "output": "/Users/yigit/Documents/ChatGPT/grid dijital/grid-dijital-site/dist/assets/ges-objects/villa.webp",
+    "size": 38278,
+    "alpha": true,
+    "bottom_padding_ratio": 0.115234375,
+    "minimumAlpha": 0,
+    "maximumAlpha": 254,
+    "transparentPixels": 104050
+  },
+  {
+    "name": "proposal",
+    "source": "/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/exec-16367c86-a3eb-4db4-80dc-a86a75d47ae1.png",
+    "output": "/Users/yigit/Documents/ChatGPT/grid dijital/grid-dijital-site/dist/assets/ges-objects/proposal.webp",
+    "size": 23786,
+    "alpha": true,
+    "bottom_padding_ratio": 0.03125,
+    "minimumAlpha": 0,
+    "maximumAlpha": 254,
+    "transparentPixels": 110039
+  },
+  {
+    "name": "factory",
+    "source": "/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/exec-f34ebfce-22e8-408a-a910-c250d553cb50.png",
+    "output": "/Users/yigit/Documents/ChatGPT/grid dijital/grid-dijital-site/dist/assets/ges-objects/factory.webp",
+    "size": 40344,
+    "alpha": true,
+    "bottom_padding_ratio": 0.130859375,
+    "minimumAlpha": 0,
+    "maximumAlpha": 254,
+    "transparentPixels": 145413
+  },
+  {
+    "name": "solar-field",
+    "source": "/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/exec-43dbb98d-323d-47a6-b04e-0965fb708819.png",
+    "output": "/Users/yigit/Documents/ChatGPT/grid dijital/grid-dijital-site/dist/assets/ges-objects/solar-field.webp",
+    "size": 34352,
+    "alpha": true,
+    "bottom_padding_ratio": 0.1640625,
+    "minimumAlpha": 0,
+    "maximumAlpha": 254,
+    "transparentPixels": 174320
+  },
+  {
+    "name": "irrigation",
+    "source": "/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/exec-18fd1f23-8891-465c-bf8c-96afc8f33e22.png",
+    "output": "/Users/yigit/Documents/ChatGPT/grid dijital/grid-dijital-site/dist/assets/ges-objects/irrigation.webp",
+    "size": 61362,
+    "alpha": true,
+    "bottom_padding_ratio": 0.07421875,
+    "minimumAlpha": 0,
+    "maximumAlpha": 254,
+    "transparentPixels": 132210
+  }
+]

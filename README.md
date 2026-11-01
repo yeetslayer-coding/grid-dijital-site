@@ -1,6 +1,6 @@
 # Grid Dijital
 
-Grid’s private website preview, now using Perakende Dijital’s layout, paper texture, glass surfaces and industrial motion with the approved Grid red palette. Implemented with stitch-design-taste, animate and Sites.
+Grid’s Vercel website preview, now using Perakende Dijital’s layout, paper texture, glass surfaces and industrial motion with the approved Grid red palette. Implemented with stitch-design-taste, animate and Sites.
 
 ## Run
 
@@ -18,10 +18,11 @@ The buildless deliverable is `dist/`. Run `npm run check` and `npm test` for syn
 - Self-hosted Outfit/Geist, responsive glass surfaces, generated GES scene, solar texture and anchored canvas grid.
 - Keyboard-accessible process tabs, mobile navigation, native FAQ disclosures.
 - Four real customer videos loaded only after a click.
-- Two-field contact brief, inline validation and explicit WhatsApp handoff.
+- Searchable 81-city native dialog, four illustrated project radio cards, inline validation and explicit WhatsApp brief handoff.
+- Transparent 3D GES objects on the original 32-second conveyor; static reduced-motion and JavaScript-free versions.
 - Existing official application and guide destinations.
 - No analytics, cookies, contact database or simulated lead success.
-- Private preview is deliberately noindex. Custom production domain has not changed.
+- Vercel preview is deliberately noindex. Custom production domain has not changed.
 
 `DESIGN.md` records the design system; `ASSETS.md` records provenance; `VALIDATION.md` records performed checks and limits.
 
