@@ -28,6 +28,8 @@ try {
     assert.equal(await page.locator('[aria-controls=city-dialog]').count(), 1, 'one city search entry point');
     assert.equal(await page.locator('#brief-form [aria-controls=city-dialog]').count(), 0);
     assert.equal(await page.locator('#city').evaluate(el => el.form.id), 'brief-form');
+    assert.equal(await page.locator('#map-city-value').innerText(), 'İl seçin');
+    assert.equal(await page.locator('#map-city-list').getAttribute('aria-labelledby'), 'map-city-label map-city-value');
     const track = page.locator('.conveyor-track');
     await page.locator('.contact-panel').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('.production-line').classList.contains('is-offscreen'));
@@ -68,6 +70,7 @@ try {
       await page.waitForFunction(el => getComputedStyle(el).opacity === '1', await panel.elementHandle());
     }
     await page.waitForFunction(() => [...document.querySelectorAll('#uygunluk .reveal')].every(el => getComputedStyle(el).opacity === '1'));
+    await page.locator('.project-art img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
     await page.locator('#uygunluk').screenshot({ path: `qa/${label}-${width}-contact.png` });
     await page.locator('button.form-button').click();
     assert.equal(await page.locator('#map-city-list').evaluate(el => el === document.activeElement), true);
@@ -96,6 +99,8 @@ try {
     await dialog.waitFor({ state: 'hidden' });
     assert.equal(await page.locator('#city').inputValue(), 'İzmir');
     assert.equal(await page.locator('#map-selection').innerText(), 'İzmir seçildi.');
+    assert.equal(await page.locator('#map-city-value').innerText(), 'İzmir');
+    assert.equal(await page.locator('[data-province].is-selected').getAttribute('data-province'), 'İzmir');
     await page.locator('.project-card').nth(1).click();
     assert.equal(await page.locator('input[name=project]:checked').inputValue(), 'Ticari ve endüstriyel çatı GES');
     assert.equal(await page.locator('#selection-summary span').innerText(), 'İzmir · Ticari çatı');
@@ -128,6 +133,8 @@ try {
     await page.locator('[data-province="Konya"]').click();
     assert.equal(await page.locator('#selection-summary span').innerText(), 'Konya · Ticari çatı');
     assert.equal(await page.locator('[data-province].is-selected').getAttribute('data-province'), 'Konya');
+    assert.equal(await page.locator('#map-city-value').innerText(), 'Konya');
+    await page.locator('.region-map').screenshot({ path: `qa/${label}-${width}-selected-map.png` });
     await page.locator('button.form-button').click();
     assert.match(await page.locator('#brief-message').innerText(), /Konya.*Ticari ve endüstriyel çatı GES/);
     await page.locator('#edit-brief').click();
@@ -146,7 +153,7 @@ try {
     targetBox = await page.locator('.project-card').first().boundingBox();
     assert.ok(targetBox.y >= 0 && targetBox.y + targetBox.height <= 1000, 'project CTA focus is visible');
     await fits();
-    report.viewports.push({ width, overflow: false, columns: width >= 768 ? 2 : 1, singleCityPicker: true, mapBriefSync: true, projectCtaFocus: true, cityDialog: { width: box.width, height: box.height, bottomSheet: width < 768 }, turkishSearch: true, cancellation: true, keyboard: true, message: true, rail: '32s; runs when visible; pauses offscreen' });
+    report.viewports.push({ width, overflow: false, columns: width >= 768 ? 2 : 1, singleCityPicker: true, selectedValueSync: true, mapBriefSync: true, projectCtaFocus: true, cityDialog: { width: box.width, height: box.height, bottomSheet: width < 768 }, turkishSearch: true, cancellation: true, keyboard: true, message: true, rail: '32s; runs when visible; pauses offscreen' });
     console.log(`${width}px passed`);
   }
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -171,6 +178,7 @@ try {
   await mobile.locator('#city-dialog').waitFor({ state: 'hidden' });
   await mobile.locator('.project-card').last().tap();
   assert.equal(await mobile.locator('#selection-summary span').innerText(), 'Şanlıurfa · Tarımsal sulama');
+  assert.equal(await mobile.locator('#map-city-value').innerText(), 'Şanlıurfa');
   await mobile.locator('#map-city-list').tap();
   await mobile.setViewportSize({ width: 390, height: 420 });
   await mobile.waitForTimeout(300);

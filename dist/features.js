@@ -48,6 +48,8 @@
   });
   selection.subscribe(state => {
     all('[data-province]').forEach(province => province.classList.toggle('is-selected', province.dataset.province === state.city));
+    document.querySelector('#map-city-value').textContent = state.city || 'İl seçin';
+    document.querySelector('#map-city-list').classList.toggle('has-selection', !!state.city);
     document.querySelector('#map-selection').textContent = state.city ? `${state.city} seçildi.` : 'Henüz şehir seçilmedi.';
   });
   all('[data-apply-project]').forEach(button => button.addEventListener('click', event => {

@@ -181,6 +181,7 @@ test('without JavaScript the process descriptions and four advertising examples 
 test('city search matches Turkish and ASCII spelling and never commits unmatched text', () => {
   const { window, document, close } = setup();
   const trigger = document.querySelector('#map-city-list'), search = document.querySelector('#city-search');
+  assert.equal(document.querySelector('#map-city-value').textContent, 'İl seçin');
   trigger.click();
   assert.equal(document.querySelector('#city-dialog').open, true);
   assert.equal(document.querySelectorAll('.city-option').length, 81);
@@ -196,6 +197,8 @@ test('city search matches Turkish and ASCII spelling and never commits unmatched
   search.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
   assert.equal(document.querySelector('#city').value, 'İzmir');
   assert.equal(document.querySelector('#map-selection').textContent, 'İzmir seçildi.');
+  assert.equal(document.querySelector('#map-city-value').textContent, 'İzmir');
+  assert.equal(document.querySelector('[data-province].is-selected').dataset.province, 'İzmir');
   assert.equal(document.querySelector('#city-dialog').open, false);
   assert.equal(document.activeElement, trigger);
   close();
@@ -215,6 +218,7 @@ test('city dialog cancellation retains the selected city and keyboard navigation
   assert.equal(document.activeElement, buttons.at(-1));
   document.querySelector('.city-cancel').click();
   assert.equal(city.value, 'İzmir'); assert.equal(document.activeElement, trigger);
+  assert.equal(document.querySelector('#map-city-value').textContent, 'İzmir');
   assert.equal(trigger.getAttribute('aria-expanded'), 'false');
   trigger.click(); assert.equal(search.value, '');
   assert.equal(document.querySelectorAll('.city-option').length, 81);
@@ -256,6 +260,8 @@ test('all 81 map provinces share the canonical city state; Istanbul has a single
     assert.equal(document.querySelector('#city').value,province.dataset.province);
     assert.equal(document.querySelectorAll('[data-province].is-selected').length,1);
     assert.equal(window.gridSelection.get().city,province.dataset.province);
+    assert.equal(document.querySelector('#map-city-value').textContent,province.dataset.province);
+    assert.ok(document.querySelector('#map-city-list').classList.contains('has-selection'));
   }
   document.querySelector('#city').value='İstanbul'; document.querySelector('#city').dispatchEvent(new window.Event('change'));
   assert.equal(document.querySelector('[data-province].is-selected').dataset.province,'İstanbul');
@@ -263,7 +269,10 @@ test('all 81 map provinces share the canonical city state; Istanbul has a single
   document.querySelector('#city-search').value='izmir';document.querySelector('#city-search').dispatchEvent(new window.Event('input'));
   document.querySelector('.city-option').click();
   assert.equal(document.querySelector('#map-selection').textContent,'İzmir seçildi.');
-  assert.equal(document.activeElement,document.querySelector('#map-city-list'));close();
+  assert.equal(document.activeElement,document.querySelector('#map-city-list'));
+  assert.equal(document.querySelector('#map-city-value').textContent,'İzmir');
+  assert.equal(document.querySelector('[data-province].is-selected').dataset.province,'İzmir');
+  close();
 });
 test('advertising browsing is isolated; only the explicit CTA applies each canonical project', () => {
   const {window,document,close}=setup();

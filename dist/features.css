@@ -42,9 +42,14 @@ button:disabled { cursor:default; opacity:.55; }
 #region-map { display:block; width:100%; height:auto; margin:16px 0 0; overflow:visible; }
 #region-map [data-province] { fill:#d3d6d0; stroke:var(--canvas); stroke-width:2.5; cursor:pointer; }
 #region-map .is-selected { fill:var(--red); }
-.map-bottom { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top:10px; border-top:1px solid var(--glass-border); }
-.map-bottom>p { font-size:12px; }
-.map-bottom button { min-height:44px; border:0; background:none; padding:8px 0; font-size:11px; color:var(--red); gap:10px; }
+.map-bottom { padding-top:18px; border-top:1px solid var(--glass-border); }
+.map-city-label { display:block; margin-bottom:8px; font-size:12px; font-weight:500; }
+.map-city-control { display:flex; align-items:center; gap:12px; width:100%; min-height:56px; padding:14px 16px; border:1px solid var(--glass-border); border-radius:10px; background:var(--glass-chip); box-shadow:inset 0 1px 0 #fafaf9; color:var(--muted); text-align:left; font-size:16px; line-height:1.5; transition:transform 140ms var(--ease),border-color 140ms var(--ease); }
+.map-city-control .icon { width:20px; height:20px; flex-shrink:0; color:var(--red); }
+.map-city-control .map-city-chevron { margin-left:auto; width:16px; height:16px; color:var(--muted); }
+.map-city-control.has-selection { color:var(--ink); border-color:#b9364380; }
+.map-city-control[aria-invalid=true] { border-color:var(--red); }
+.map-city-control:active { transform:translateY(1px); }
 .map-hint { font-size:10px; color:var(--muted); line-height:1.7; margin-top:6px; }
 .map-credit { display:inline-flex; align-items:center; min-height:44px; margin-top:2px; font-size:8px; color:var(--muted); text-decoration:underline; text-underline-offset:3px; }
 /* The optional analysis remains inside the existing review-before-send flow. */
@@ -157,7 +162,6 @@ button:disabled { cursor:default; opacity:.55; }
  .ad-actions .button { width:100%; justify-content:space-between; font-size:11px; gap:12px; }
  .region-map { padding:22px 18px 10px; }
  .map-heading h3 { font-size:28px; }
- .map-bottom { flex-wrap:wrap; gap:2px 12px; }
  .map-credit { font-size:7px; }
  .analysis-question label { font-size:12px; padding:11px 10px; }
  .analysis-question legend { font-size:13px; }
@@ -189,10 +193,13 @@ button:disabled { cursor:default; opacity:.55; }
  .output-footer { font-size:7px; gap:10px; }
 }
 @media(prefers-reduced-motion:reduce) {
+ .map-city-control { transition:none; }
+ .map-city-control:active { transform:none; }
  .quiet-button,.output-open { transition:none; }
  .quiet-button:active,.output-open:active { transform:none; }
 }
 body[data-input=keyboard] .quiet-button,body[data-input=keyboard] .output-open { transition:none; transform:none; }
+body[data-input=keyboard] .map-city-control { transition:none; transform:none; }
 @media print { .output-open,.feature-tabs { display:none; } .tab-stack.is-ready>.feature-panel[hidden] { visibility:visible; grid-area:auto; } }
 /* Top-layer windows must stay viewport-bound even while the underlying page settles. */
 #output-dialog,#video-dialog { position:fixed; inset:0; margin:auto; }
