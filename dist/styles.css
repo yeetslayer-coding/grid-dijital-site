@@ -194,14 +194,14 @@ body[data-input=keyboard] .stage-tab{transition:none}
 
 html:has(body[data-input=keyboard]){scroll-behavior:auto}
 
-/* GES objects replace the packaging silhouettes while retaining the physical rail. */
+/* Flat GES vectors share a 200 × 200 drawing area and a common baseline. */
 .conveyor-window { padding-top:30px; }
 .conveyor-group { gap:32px; }
 .conveyor-object { --object-size:208px; width:var(--object-size); height:calc(var(--object-size) + 32px); flex-shrink:0; display:grid; grid-template-rows:32px var(--object-size); align-items:end; }
 .object-caption { display:flex; align-items:center; justify-content:center; gap:10px; height:32px; color:var(--ink); }
 .object-caption>span { font-size:10px; letter-spacing:.07em; color:var(--red); }
 .object-caption>strong { font-family:Outfit,Arial,sans-serif; font-weight:500; font-size:18px; letter-spacing:-.02em; }
-.conveyor-object>img { width:var(--object-size); height:var(--object-size); align-self:end; object-fit:contain; margin-bottom:calc(-1 * var(--object-size) * var(--object-bottom,0)); }
+.conveyor-object>img { width:var(--object-size); height:var(--object-size); align-self:end; object-fit:contain; }
 .brief-heading { padding-bottom:25px; margin-bottom:24px; border-bottom:1px solid var(--glass-border); }
 .contact-panel .brief-heading h3 { font-size:32px; letter-spacing:-.04em; margin-bottom:8px; }
 .brief-heading>p { color:var(--muted); font-size:13px; line-height:1.7; }

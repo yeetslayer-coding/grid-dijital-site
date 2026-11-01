@@ -122,7 +122,7 @@ test('all local assets, anchor destinations, labels and ARIA relationships resol
   close();
 });
 
-test('conveyor has GES objects, no pause control, and pauses offscreen or in a hidden tab', () => {
+test('conveyor repeats five flat SVGs, has no pause control, and pauses offscreen or in a hidden tab', () => {
   let callback;
   class Observer { constructor(cb) { callback = cb; } observe() {} disconnect() {} }
   const { window, document, close } = setup({ IntersectionObserver: Observer, matchMedia: () => ({ matches: true, addEventListener() {} }) });
@@ -130,6 +130,18 @@ test('conveyor has GES objects, no pause control, and pauses offscreen or in a h
   assert.equal(document.querySelector('.motion-toggle'), null);
   assert.equal(document.querySelector('.parcel'), null);
   assert.equal(document.querySelectorAll('.conveyor-object').length, 10);
+  const sources = [...conveyor.querySelectorAll('.conveyor-object img')].map(image => image.getAttribute('src'));
+  assert.equal(new Set(sources).size, 5);
+  assert.deepEqual(sources.slice(0, 5), sources.slice(5));
+  for (const source of new Set(sources)) {
+    assert.match(source, /^\/assets\/ges-vectors\/[a-z-]+\.svg$/);
+    const svg = new JSDOM(readFileSync(new URL(`../dist${source}`, import.meta.url), 'utf8'), { contentType: 'image/svg+xml' });
+    assert.equal(svg.window.document.documentElement.getAttribute('viewBox'), '0 0 200 200');
+    assert.equal(svg.window.document.querySelector('image,filter,linearGradient,radialGradient'), null);
+    svg.window.close();
+  }
+  assert.equal(conveyor.querySelector('[style*="--object-bottom"]'), null);
+  assert.match(document.querySelector('.project-art img').getAttribute('src'), /ges-objects\/villa\.webp$/);
   assert.ok(conveyor.classList.contains('is-offscreen'));
   callback([{ target: conveyor, isIntersecting: true }]);
   assert.equal(conveyor.classList.contains('is-offscreen'), false);

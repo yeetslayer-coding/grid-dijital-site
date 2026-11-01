@@ -20,7 +20,7 @@ Paper grain is copied from the source. Solar modules, roof structures, wiring an
 
 ## Composition and content
 
-Hero pairs the Grid message with a glass browser frame containing a generated solar scene. The inline panel/cursor image punctuates the headline. Scene alt text and caption explicitly identify it as representative. The source conveyor geometry now carries Bölge → Reklam → Başvuru → Keşif → Teklif. Each stage now carries a generated transparent 3D object; there is no pause button. Objects share a visual floor line and aligned HTML stage captions.
+Hero pairs the Grid message with a glass browser frame containing a generated solar scene. The inline panel/cursor image punctuates the headline. Scene alt text and caption explicitly identify it as representative. The source conveyor geometry now carries Bölge → Reklam → Başvuru → Keşif → Teklif. Each stage carries an original flat SVG illustration with charcoal outlines, off-white/mineral fills and Grid-red details; there is no pause button. All five drawings use a 200 × 200 viewBox, 2.5-unit strokes and a shared baseline at y=196. There is no perspective, shading, filter, gradient or embedded raster. The rail uses 208/180/120px render sizes and aligned HTML stage captions; no per-image offset is needed.
 
 Four process tabs use light selected surfaces on a red section. All initialized panels share one CSS grid cell, so even inactive panels contribute to the common height. Inactive panels have hidden, inert, aria-hidden and tabindex=-1. Without JavaScript, all four descriptions appear sequentially.
 
@@ -45,4 +45,4 @@ The contact panel retains its heading and local-only two-field brief. A numbered
 
 City search is a fixed-height compact desktop dialog and a mobile bottom sheet. Filtering preserves the window height. Turkish case and diacritics are normalized for ASCII search; only canonical city-list values are committed. Escape, backdrop and cancel retain the previous choice. Native dialog owns focus containment; Arrow keys/Home/End navigate results, unique-result Enter selects, and closing returns focus to the trigger. Search has no network dependency. No backend or persistent state is added.
 
-Cards and the city trigger use 140ms response. The city dialog uses the existing 250ms curve; keyboard-initiated transitions are instant. Reduced motion removes positional transitions. No-JavaScript preserves official contact and the static five-stage rail. Image prompts and transparent WebP provenance are in ASSETS.md.
+Cards and the city trigger use 140ms response. The city dialog uses the existing 250ms curve; keyboard-initiated transitions are instant. Reduced motion removes positional transitions. No-JavaScript preserves official contact and the static five-stage rail. Selection-card WebP images remain unchanged; rail SVGs are a separate family. Asset provenance is in ASSETS.md.

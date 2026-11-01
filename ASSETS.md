@@ -1,5 +1,13 @@
 # Assets and provenance
 
+## Flat vector rail — 2026-11-01
+
+The active conveyor uses five original hand-authored SVG drawings in `dist/assets/ges-vectors/`: `region.svg`, `advertising.svg`, `application.svg`, `villa.svg` and `proposal.svg`. They depict a flat street map and pin, front-facing advertising display, applicant clipboard, solar-roof house elevation and approved proposal folder. These are native paths and shapes, not traced or embedded raster images. No external artwork or icon library is used.
+
+All five share a 200 × 200 viewBox, 2.5-unit rounded charcoal strokes and a y=196 baseline. Colors are Grid red `#B93643`, ink `#202222`, canvas `#F4F4F2` and mineral `#E9EAE7`. There is no perspective, lighting, shadow, gradient or filter. Stage numbers and names remain HTML. The old image-specific alpha-padding offsets are removed.
+
+The two conveyor groups reuse these SVG files. The four project-selection images—including the previously shared villa WebP—are unchanged. The earlier imagegen provenance below is retained for those images and the replaced rail assets.
+
 ## GES object family and selection cards — 2026-11-01
 
 Eight project assets were generated with the built-in imagegen tool, inspected, and converted to 512 × 512 transparent WebP at quality 88. Total served size: 293,362 bytes. All have a transparent alpha channel. No image text, logos or customer-result claims are added. Source originals are retained in the Codex generated-images folder; exact original/output paths and alpha measurements are recorded in `verification/ges-assets.json`.

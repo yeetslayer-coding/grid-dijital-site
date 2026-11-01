@@ -36,6 +36,20 @@ try {
     const start = await track.evaluate(el => getComputedStyle(el).transform);
     await page.waitForTimeout(200);
     assert.notEqual(await track.evaluate(el => getComputedStyle(el).transform), start);
+    await track.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
+    const seam = await track.evaluate(el => {
+      const animation = el.getAnimations().find(item => item.animationName === 'conveyor-travel');
+      const time = animation.currentTime;
+      animation.pause();
+      animation.currentTime = 0;
+      const start = [...el.children[1].children].map(item => item.getBoundingClientRect().x);
+      animation.currentTime = 31999.99;
+      const end = [...el.children[0].children].map(item => item.getBoundingClientRect().x);
+      animation.currentTime = time;
+      animation.play();
+      return Math.max(...start.map((x, i) => Math.abs(x - end[i])));
+    });
+    assert.ok(seam < 1, 'conveyor loop joins without a visible position jump');
     // Pause only the screenshot sampling, then immediately resume the real animation.
     await track.evaluate(el => el.getAnimations().forEach(a => a.pause()));
     await page.locator('.production-line').screenshot({ path: `qa/${label}-${width}-rail.png` });
