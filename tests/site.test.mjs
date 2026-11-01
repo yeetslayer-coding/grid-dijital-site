@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { JSDOM } from 'jsdom';
 const html = readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8');
-const script = readFileSync(new URL('../dist/app.js', import.meta.url), 'utf8');
+const script = ['selection.js','app.js','features.js'].map(name => readFileSync(new URL('../dist/'+name, import.meta.url), 'utf8')).join('\n');
 function setup(options = {}) {
   const dom = new JSDOM(html, { url: 'https://grid.example/', runScripts: 'outside-only', pretendToBeVisual: true });
   const { window } = dom;
@@ -30,16 +30,17 @@ test('navigation opens, closes after link activation and restores focus on Escap
   assert.equal(toggle.getAttribute('aria-expanded'), 'false');
   close();
 });
-test('process tabs expose exactly one panel and support arrow, Home and End navigation', () => {
+test('advertising tabs expose exactly one panel and support arrow, Home and End navigation', () => {
   const { window, document, close } = setup();
-  const tabs = [...document.querySelectorAll('[role=tab]')];
+  const root = document.querySelector('[data-tabs=ads]');
+  const tabs = [...root.querySelectorAll('[role=tab]')];
   function check(index) {
-    assert.equal(document.querySelectorAll('[role=tab][aria-selected=true]').length, 1);
-    assert.equal(document.querySelectorAll('[role=tabpanel]:not([hidden])').length, 1);
+    assert.equal(root.querySelectorAll('[role=tab][aria-selected=true]').length, 1);
+    assert.equal(root.querySelectorAll('[role=tabpanel]:not([hidden])').length, 1);
     assert.equal(tabs[index].getAttribute('aria-selected'), 'true');
     assert.equal(document.querySelector(`#${tabs[index].getAttribute('aria-controls')}`).hidden, false);
     assert.equal(tabs[index].tabIndex, 0);
-    [...document.querySelectorAll('[role=tabpanel]')].forEach((panel, n) => {
+    [...root.querySelectorAll('[role=tabpanel]')].forEach((panel, n) => {
       assert.equal(panel.hasAttribute('inert'), n !== index);
       assert.equal(panel.getAttribute('aria-hidden'), String(n !== index));
       assert.equal(panel.tabIndex, n === index ? 0 : -1);
@@ -94,7 +95,7 @@ test('video is requested only on click and unloaded when its dialog closes', () 
   assert.equal(document.querySelector('#video-dialog').hasAttribute('data-instant'), true, 'keyboard activation is instant');
   assert.match(document.querySelector('iframe').src, /youtube-nocookie\.com\/embed\/j4m6kfkmXHY/);
   assert.equal(document.querySelector('#video-title').textContent, 'Suntep Solar');
-  document.querySelector('.close-dialog').click();
+  document.querySelector('#video-dialog .close-dialog').click();
   assert.equal(document.querySelectorAll('iframe').length, 0);
   assert.equal(document.querySelector('#video-dialog').open, false);
   assert.equal(document.activeElement, button);
@@ -166,10 +167,11 @@ test('reveal observer staggers by 75ms, runs once, and releases all content when
   assert.equal(document.documentElement.classList.contains('js-reveal'), false);
   close();
 });
-test('without JavaScript all four process descriptions remain accessible and each video has a direct link', () => {
+test('without JavaScript the CRM and four advertising examples remain accessible and each video has a direct link', () => {
   const dom = new JSDOM(html);
   const document = dom.window.document;
-  assert.equal(document.querySelectorAll('.stage-panel:not([hidden]):not([inert]):not([aria-hidden=true])').length, 4);
+  assert.equal(document.querySelectorAll('.ad-panel:not([hidden]):not([inert])').length, 4);
+  assert.equal(document.querySelectorAll('.crm-record').length, 3);
   assert.equal(document.querySelectorAll('noscript a[href*="youtube.com/watch"]').length, 4);
   assert.ok(document.querySelector('noscript style'), 'noscript style must be actual HTML, not escaped text');
   assert.ok(document.querySelector('.official-application a').href.includes('griddijital.com'));
@@ -232,4 +234,129 @@ test('invalid form focuses city trigger, cards update the summary and editing ke
   assert.equal(document.querySelector('input[name=project]:checked').value, 'Tarımsal sulama GES');
   assert.equal(document.querySelector('#city-value').textContent, 'Ankara');
   close();
+});
+
+test('all 81 map provinces share the canonical city state; Istanbul has a single selection', () => {
+  const {window,document,close}=setup();
+  const provinces=[...document.querySelectorAll('[data-province]')];
+  assert.equal(provinces.length,81);
+  assert.equal(new Set(provinces.map(p=>p.dataset.province)).size,81);
+  assert.equal(provinces.filter(p=>p.dataset.province==='İstanbul').length,1);
+  for(const province of provinces){
+    province.dispatchEvent(new window.MouseEvent('click',{bubbles:true}));
+    assert.equal(document.querySelector('#city').value,province.dataset.province);
+    assert.equal(document.querySelectorAll('[data-province].is-selected').length,1);
+    assert.equal(window.gridSelection.get().city,province.dataset.province);
+  }
+  document.querySelector('#city').value='İstanbul'; document.querySelector('#city').dispatchEvent(new window.Event('change'));
+  assert.equal(document.querySelector('[data-province].is-selected').dataset.province,'İstanbul');
+  document.querySelector('#map-city-list').click();
+  document.querySelector('#city-search').value='izmir';document.querySelector('#city-search').dispatchEvent(new window.Event('input'));
+  document.querySelector('.city-option').click();
+  assert.equal(document.querySelector('#map-selection').textContent,'İzmir seçildi.');
+  assert.equal(document.activeElement,document.querySelector('#map-city-list'));close();
+});
+test('advertising browsing is isolated; only the explicit CTA applies each canonical project', () => {
+  const {window,document,close}=setup();
+  window.HTMLElement.prototype.scrollIntoView=function(){};
+  const tabs=[...document.querySelectorAll('[data-tabs=ads] [role=tab]')];
+  tabs.forEach(tab=>tab.click());
+  assert.equal(window.gridSelection.get().project,'');
+  [...document.querySelectorAll('[data-apply-project]')].forEach((button,index)=>{
+    tabs[index].click();button.click();
+    assert.equal(document.querySelector('input[name=project]:checked').value,window.GridLogic.projects[index]);
+    assert.equal(window.gridSelection.get().project,window.GridLogic.projects[index]);
+  });close();
+});
+test('CRM advances and resets all three fixtures without touching real visitor selections', () => {
+  const {window,document,close}=setup();
+  window.gridSelection.setCity('Edirne');window.gridSelection.setProject(window.GridLogic.projects[2]);
+  const before=JSON.stringify(window.gridSelection.get());
+  const counts=()=>[...document.querySelectorAll('.crm-count')].map(el=>Number(el.textContent));
+  assert.deepEqual(counts(),[1,1,1,0]);
+  for(const id of ['D-101','D-102','D-103']){
+    document.querySelector(`[data-record="${id}"]`).click();
+    while(!document.querySelector('#crm-advance').disabled)document.querySelector('#crm-advance').click();
+    assert.equal(document.querySelector('#crm-detail-stage').textContent,'Teklif');
+    assert.match(document.querySelector('#crm-task').textContent,/Teklifi birlikte/);
+  }
+  assert.deepEqual(counts(),[0,0,0,3]);
+  assert.equal(JSON.stringify(window.gridSelection.get()),before);
+  assert.equal(document.querySelectorAll('[data-record]').length,3);
+  document.querySelector('#crm-reset').click();assert.deepEqual(counts(),[1,1,1,0]);
+  assert.equal(document.querySelector('#crm-detail-id').textContent,'D-101');close();
+});
+test('analysis covers every answer combination with three distinct priorities in the promised order', () => {
+  const {window,close}=setup(); const logic=window.GridLogic;
+  let combinations=0;
+  for(const ads of logic.analysisChoices.ads)for(const tracking of logic.analysisChoices.tracking)for(const response of logic.analysisChoices.response)for(const capacity of logic.analysisChoices.capacity){
+    const results=logic.analyze({ads,tracking,response,capacity});
+    assert.equal(results.length,3);assert.equal(new Set(results.map(r=>r.id)).size,3);
+    const expected=[];
+    if(response!=='same-day')expected.push('response');if(capacity!=='ready')expected.push('capacity');
+    if(tracking!=='shared')expected.push('tracking');if(ads!=='active')expected.push('campaign');
+    expected.push('qualification','creative','review');
+    assert.deepEqual(Array.from(results,r=>r.id),expected.slice(0,3));combinations++;
+  }
+  assert.equal(combinations,81);
+  assert.equal(logic.analyze({}).length,0);
+  assert.equal(logic.analyze({ads:'invalid',tracking:'shared',response:'same-day',capacity:'ready'}).length,0);
+  close();
+});
+test('analysis is optional, opt-in, reviewable, and invalidated after answer changes', () => {
+  const {window,document,close}=setup();
+  window.gridSelection.setCity('İzmir');window.gridSelection.setProject(window.GridLogic.projects[0]);
+  const baseline="Merhaba Grid Dijital, İzmir bölgesinde Konut ve villa GES alanında müşteri kazanımı için görüşmek istiyorum. Bölgesel Talep Sistemi'nin firmamıza uygunluğunu birlikte değerlendirebilir miyiz?";
+  assert.equal(window.GridLogic.buildBrief(window.gridSelection.get()),baseline);
+  document.querySelector('#analysis-run').click();
+  assert.equal(document.activeElement,document.querySelector('input[name=analysis-ads]'));
+  assert.equal(document.querySelector('#analysis-error').hidden,false);
+  for(const [key,value] of Object.entries({ads:'none',tracking:'none',response:'late',capacity:'unclear'}))document.querySelector(`input[name="analysis-${key}"][value="${value}"]`).click();
+  document.querySelector('#analysis-run').click();
+  assert.equal(document.querySelectorAll('#analysis-priorities li').length,3);
+  assert.equal(window.GridLogic.buildBrief(window.gridSelection.get()),baseline);
+  document.querySelector('#analysis-include').click();
+  const submit=()=>document.querySelector('#brief-form').dispatchEvent(new window.Event('submit',{bubbles:true,cancelable:true}));submit();
+  let message=document.querySelector('#brief-message').textContent;
+  assert.ok(message.startsWith(baseline+'\n\nBaşlangıç önceliklerim:'));
+  assert.match(message,/1\. İlk dönüş/);assert.match(message,/2\. Keşif/);assert.match(message,/3\. Başvuruları/);
+  assert.equal(new URL(document.querySelector('#whatsapp-link').href).searchParams.get('text'),message);
+  document.querySelector('#edit-brief').click();
+  document.querySelector('input[name=analysis-response][value=same-day]').click();
+  assert.equal(document.querySelector('#analysis-result').hidden,true);
+  assert.equal(window.gridSelection.get().analysis.length,0);submit();
+  assert.equal(document.querySelector('#brief-message').textContent,baseline);
+  document.querySelector('#edit-brief').click();document.querySelector('#analysis-run').click();document.querySelector('#analysis-include').click();
+  assert.equal(window.gridSelection.get().analysis.length,3);
+  document.querySelector('#analysis-remove').click();assert.equal(window.gridSelection.get().analysis.length,0);
+  assert.equal(window.localStorage.length,0);assert.equal(window.sessionStorage.length,0);assert.equal(document.cookie,'');close();
+});
+test('delivery dialog opens the requested document, switches with keyboard, and restores focus', () => {
+  const {window,document,close}=setup();
+  const dialog=document.querySelector('#output-dialog');
+  for(const button of document.querySelectorAll('[data-output]')){
+    button.click();assert.equal(dialog.open,true);
+    assert.equal(dialog.querySelector('[role=tab][aria-selected=true]').dataset.outputTab,button.dataset.output);
+    document.querySelector('.output-close').click();assert.equal(document.activeElement,button);
+  }
+  const opener=document.querySelector('[data-output]');opener.click();
+  const tab=dialog.querySelector('[role=tab][aria-selected=true]');
+  tab.dispatchEvent(new window.KeyboardEvent('keydown',{key:'End',bubbles:true}));
+  assert.equal(dialog.querySelector('[role=tab][aria-selected=true]').dataset.outputTab,'review');
+  assert.equal(dialog.querySelectorAll('[role=tabpanel]:not([hidden])').length,1);
+  assert.equal(dialog.querySelector('form,input'),null);
+  assert.match(dialog.querySelector('.output-disclaimer').textContent,/Temsili örnek/);
+  close();
+});
+test('real customer stories have attributed titles and no synthetic CRM records', () => {
+  const {document,close}=setup();
+  for(const button of document.querySelectorAll('[data-video]')){
+    button.click();
+    assert.ok(document.querySelector('#video-official-title').textContent.length>30);
+    assert.match(document.querySelector('#video-fallback').href,new RegExp(button.dataset.video));
+    assert.match(document.querySelector('#video-solution').href,/griddijital\.com/);
+    assert.doesNotMatch(document.querySelector('#video-dialog').textContent,/D-101|D-102|D-103/);
+    document.querySelector('#video-dialog .close-dialog').click();
+  }
+  assert.equal(document.querySelectorAll('iframe').length,0);close();
 });

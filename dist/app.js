@@ -19,37 +19,12 @@
   const mobileMedia = window.matchMedia('(max-width:767px)');
   mobileMedia.addEventListener('change', () => closeMenu());
 
-  const tabs = all('.stage-tab');
-  const panels = all('.stage-panel');
-  function selectStage(index, focus = false) {
-    tabs.forEach((tab, n) => {
-      const selected = n === index;
-      tab.setAttribute('aria-selected', String(selected));
-      tab.tabIndex = selected ? 0 : -1;
-      panels[n].hidden = !selected;
-      panels[n].toggleAttribute('inert', !selected);
-      panels[n].setAttribute('aria-hidden', String(!selected));
-      panels[n].tabIndex = selected ? 0 : -1;
-    });
-    if (focus) tabs[index].focus();
-  }
-  selectStage(0);
-  document.querySelector('.stage-panels').classList.add('tabs-ready');
-  tabs.forEach((tab, index) => {
-    tab.addEventListener('click', () => selectStage(index));
-    tab.addEventListener('keydown', event => {
-      let next;
-      if (['ArrowDown', 'ArrowRight'].includes(event.key)) next = (index + 1) % tabs.length;
-      if (['ArrowUp', 'ArrowLeft'].includes(event.key)) next = (index - 1 + tabs.length) % tabs.length;
-      if (event.key === 'Home') next = 0;
-      if (event.key === 'End') next = tabs.length - 1;
-      if (next !== undefined) { event.preventDefault(); selectStage(next, true); }
-    });
+  const stories = Object.freeze({
+    j4m6kfkmXHY: { title:'Suntep Solar: "10 Keşiften 9\'unu Satışa Çeviriyoruz" | Grid Dijital Müşteri Deneyimi', solution:'GES müşteri kazanım sistemi', href:'https://griddijital.com/tr/hizmetler/ges-musteri-edinim-sistemi/' },
+    '0laH1mUQchY': { title:'Family Group Enerji: "Reklamlar Açıldığı Gün Talep Akışı Başladı" | Grid Dijital Müşteri Deneyimi', solution:'GES Meta reklamları', href:'https://griddijital.com/tr/hizmetler/ges-meta-reklamlari/' },
+    D6cYJVJP8fY: { title:'2 Haftada 33 Keşif Randevusu | Grid Dijital Müşteri Deneyimi', solution:'GES müşteri kazanım sistemi', href:'https://griddijital.com/tr/hizmetler/ges-musteri-edinim-sistemi/' },
+    Gw3Y4yd2K7w: { title:'Bir Arçelik Bayisinin Grid Dijital Deneyimi | Müşteri Referansı', solution:'Grid Dijital yaklaşımı', href:'https://griddijital.com/tr/hakkimizda/' }
   });
-
-  const solutions = all('.solution');
-  solutions.forEach(item => item.addEventListener('toggle', () => { if (item.open) solutions.forEach(other => { if (other !== item) other.open = false; }); }));
-
   const dialog = document.querySelector('#video-dialog');
   const videoContainer = document.querySelector('#video-container');
   let videoTrigger;
@@ -61,6 +36,11 @@
     const video = button.dataset.video;
     const title = button.dataset.title;
     document.querySelector('#video-title').textContent = title;
+    const story = stories[video];
+    document.querySelector('#video-official-title').textContent = story.title;
+    const solution = document.querySelector('#video-solution');
+    solution.textContent = story.solution + ' ↗';
+    solution.href = story.href;
     document.querySelector('#video-fallback').href = `https://www.youtube.com/watch?v=${video}`;
     const iframe = document.createElement('iframe');
     iframe.title = `${title} müşteri deneyimi videosu`;
@@ -81,7 +61,9 @@
     }
   });
 
-  const cities = ['Adana','Adıyaman','Afyonkarahisar','Ağrı','Aksaray','Amasya','Ankara','Antalya','Ardahan','Artvin','Aydın','Balıkesir','Bartın','Batman','Bayburt','Bilecik','Bingöl','Bitlis','Bolu','Burdur','Bursa','Çanakkale','Çankırı','Çorum','Denizli','Diyarbakır','Düzce','Edirne','Elazığ','Erzincan','Erzurum','Eskişehir','Gaziantep','Giresun','Gümüşhane','Hakkâri','Hatay','Iğdır','Isparta','İstanbul','İzmir','Kahramanmaraş','Karabük','Karaman','Kars','Kastamonu','Kayseri','Kırıkkale','Kırklareli','Kırşehir','Kilis','Kocaeli','Konya','Kütahya','Malatya','Manisa','Mardin','Mersin','Muğla','Muş','Nevşehir','Niğde','Ordu','Osmaniye','Rize','Sakarya','Samsun','Siirt','Sinop','Sivas','Şanlıurfa','Şırnak','Tekirdağ','Tokat','Trabzon','Tunceli','Uşak','Van','Yalova','Yozgat','Zonguldak'];
+  const cities = window.GridLogic.cities;
+  const selection = window.GridLogic.createSelection();
+  window.gridSelection = selection;
   const citySelect = document.querySelector('#city');
   cities.forEach(city => { const option = document.createElement('option'); option.value = city; option.textContent = city; citySelect.append(option); });
   const form = document.querySelector('#brief-form');
@@ -97,15 +79,23 @@
   const summary = document.querySelector('#selection-summary');
   const normalizeCity = value => value.trim().toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i');
 
-  function updateSelection() {
+  function updateSelection(state) {
+    citySelect.value = state.city;
+    all('input[name=project]', form).forEach(input => { input.checked = input.value === state.project; });
     const selected = form.querySelector('input[name=project]:checked');
-    document.querySelector('#city-value').textContent = citySelect.value || 'Şehrinizi seçin';
-    cityTrigger.classList.toggle('has-selection', !!citySelect.value);
-    summary.classList.toggle('has-selection', !!citySelect.value || !!selected);
-    summary.querySelector('span').textContent = citySelect.value || selected
-      ? `${citySelect.value || 'Şehir seçin'} · ${selected?.closest('label').querySelector('strong').textContent || 'Proje türü seçin'}`
+    document.querySelector('#city-value').textContent = state.city || 'Şehrinizi seçin';
+    cityTrigger.classList.toggle('has-selection', !!state.city);
+    summary.classList.toggle('has-selection', !!state.city || !!selected);
+    summary.querySelector('span').textContent = state.city || selected
+      ? `${state.city || 'Şehir seçin'} · ${selected?.closest('label').querySelector('strong').textContent || 'Proje türü seçin'}`
       : 'Şehir ve proje türünü seçin.';
+    if (state.city) { cityError.hidden = true; citySelect.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-describedby'); }
+    if (selected) { projectError.hidden = true; all('input[name=project]').forEach(input => { input.removeAttribute('aria-invalid'); input.removeAttribute('aria-describedby'); }); }
+    const message = window.GridLogic.buildBrief(state);
+    document.querySelector('#brief-message').textContent = message;
+    document.querySelector('#whatsapp-link').href = `https://wa.me/905515062980?text=${encodeURIComponent(message)}`;
   }
+  selection.subscribe(updateSelection);
   function cityMotion(event) {
     cityDialog.toggleAttribute('data-instant', event.detail === 0 || event.type === 'cancel' || document.body.dataset.input === 'keyboard');
   }
@@ -141,14 +131,18 @@
     cityResults.hidden = matches.length === 0;
     cityCount.textContent = matches.length ? `${matches.length} şehir` : 'Sonuç bulunamadı';
   }
-  cityTrigger.addEventListener('click', event => {
+  let cityReturnFocus = cityTrigger;
+  function openCity(event, returnFocus = cityTrigger) {
+    cityReturnFocus = returnFocus;
     cityMotion(event);
     citySearch.value = '';
     renderCities();
     cityDialog.showModal();
     cityTrigger.setAttribute('aria-expanded', 'true');
     citySearch.focus();
-  });
+  }
+  cityTrigger.addEventListener('click', event => openCity(event));
+  document.addEventListener('grid:open-city', event => openCity({ detail:event.detail.keyboard ? 0 : 1 }, event.detail.trigger));
   citySearch.addEventListener('input', renderCities);
   citySearch.addEventListener('keydown', event => {
     if (event.isComposing) return;
@@ -182,15 +176,15 @@
   cityDialog.addEventListener('close', () => {
     if (cityDialog.open) return;
     cityTrigger.setAttribute('aria-expanded', 'false');
-    cityTrigger.focus();
+    cityReturnFocus.focus();
   });
   cityDialog.addEventListener('click', event => {
     if (event.target !== cityDialog) return;
     const rect = cityDialog.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) { cityMotion(event); cityDialog.close(); }
   });
-  citySelect.addEventListener('change', () => { cityError.hidden = true; citySelect.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-invalid'); cityTrigger.removeAttribute('aria-describedby'); updateSelection(); });
-  all('input[name=project]').forEach(input => input.addEventListener('change', () => { projectError.hidden = true; all('input[name=project]').forEach(item => { item.removeAttribute('aria-invalid'); item.removeAttribute('aria-describedby'); }); updateSelection(); }));
+  citySelect.addEventListener('change', () => selection.setCity(citySelect.value));
+  all('input[name=project]').forEach(input => input.addEventListener('change', () => selection.setProject(input.value)));
   form.addEventListener('submit', event => {
     event.preventDefault();
     const project = form.querySelector('input[name=project]:checked');
@@ -202,9 +196,6 @@
     else cityTrigger.removeAttribute('aria-describedby');
     all('input[name=project]').forEach(input => { input.setAttribute('aria-invalid', String(!project)); if (!project) input.setAttribute('aria-describedby', 'project-error'); });
     if (!city || !project) { (!city ? cityTrigger : form.querySelector('input[name=project]')).focus(); return; }
-    const message = `Merhaba Grid Dijital, ${city} bölgesinde ${project.value} alanında müşteri kazanımı için görüşmek istiyorum. Bölgesel Talep Sistemi'nin firmamıza uygunluğunu birlikte değerlendirebilir miyiz?`;
-    document.querySelector('#brief-message').textContent = message;
-    document.querySelector('#whatsapp-link').href = `https://wa.me/905515062980?text=${encodeURIComponent(message)}`;
     form.hidden = true; result.hidden = false; result.focus();
   });
   document.querySelector('#edit-brief').addEventListener('click', () => { result.hidden = true; form.hidden = false; cityTrigger.focus(); });

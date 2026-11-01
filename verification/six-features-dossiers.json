@@ -1,0 +1,23 @@
+{
+  "url": "http://localhost:4317",
+  "browser": "151.0.7922.34",
+  "viewports": [
+    {
+      "width": 390,
+      "dossiers": 4,
+      "dialogBounds": true,
+      "stickyClose": true,
+      "focusReturn": true
+    },
+    {
+      "width": 1440,
+      "dossiers": 4,
+      "dialogBounds": true,
+      "stickyClose": true,
+      "focusReturn": true
+    }
+  ],
+  "errors": [],
+  "status": "passed",
+  "scope": "Lifecycle and layout only; video transport stubbed, playback not tested."
+}

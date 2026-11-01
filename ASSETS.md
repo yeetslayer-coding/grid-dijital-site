@@ -103,3 +103,38 @@ Use case: product-mockup. A premium photorealistic 3D still-life illustration fo
 ### Inline solar/cursor prompt
 
 Use case: product-mockup. Create a small premium 3D cutout illustration for inline placement beside a headline on a Turkish solar marketing website. A single miniature charcoal photovoltaic solar panel, slightly tilted backwards and to the left, in a slim rounded brushed-silver frame. A large ivory-white computer mouse pointer arrow with a muted crimson red #B93643 beveled edge sits in front of the lower-right panel corner, pointing at one solar cell. The two objects form a tightly composed friendly tangible object. Restrained realistic materials, exact tidy solar cells, soft ambient light and minimal contact shadow. Landscape 3:2 composition with the full objects contained, crisp readable silhouette at 100px wide. Transparent background, no floor, no backdrop, no text, no letters, no additional objects, no blue/purple/green. More like a high-end interface illustration photographed as a physical model, less like a toy.
+
+## Campaign photographs and province map — 2026-11-01
+
+Generated with the built-in `image_gen.imagegen` tool, one request per scene. No CLI/API fallback. All four final project assets are local 1200 × 800 WebP, quality 83 (format/size conversion with cwebp; no content retouching). Original PNGs are preserved in `/Users/yigit/.codex/generated_images/01a1972d-9673-71b0-a55c-f84153bf9442/`. The photographs are illustrative, not client-project evidence. UI captions explicitly say this; campaign headlines are HTML, never embedded pixels.
+
+| Final file | Original output |
+|---|---|
+| `dist/assets/campaigns/residential.webp` | `exec-3b5a5660-6ae3-4247-b004-7c6bb1891f27.png` |
+| `dist/assets/campaigns/commercial.webp` | `exec-37756a91-41b0-4a6d-a690-00f9f205b0c8.png` |
+| `dist/assets/campaigns/epc.webp` | `exec-e9e20887-9ad9-4868-90a5-25a60d240490.png` |
+| `dist/assets/campaigns/irrigation.webp` | `exec-090d300d-3215-422b-a50c-4b8a7e617b68.png` |
+
+Each exact prompt is the following prefix, its scene paragraph, then the common suffix.
+
+Prefix: “Use case: ads-marketing. Asset: photo-only editorial campaign showcase for Grid Dijital, a solar-sector marketing agency in Turkey.”
+
+Residential: “An actual full-scale contemporary two-storey cream stucco Mediterranean Turkish villa with a simple sloping roof fitted with precisely aligned dark photovoltaic panels. A few olive trees, understated garden, limestone boundary wall. Architectural photography from a slightly elevated oblique angle, house and panels both clearly visible.”
+
+Commercial: “An actual large Turkish industrial factory, photographed from drone height, a disciplined expanse of charcoal solar panel arrays on its low metal factory roof, concrete yard, loading doors along the lower building facade, minimal industrial surroundings. Authentic industrial architecture, clean geometric composition.”
+
+EPC: “An actual utility-scale solar power installation in the inland Turkish countryside. Long parallel rows of dark photovoltaic panels on realistic metal supports crossing a gently rolling dry plateau. Elevated photography, distant low mountains, plenty of detail, one narrow maintenance road to establish scale.”
+
+Irrigation: “An actual solar-powered agricultural irrigation installation in rural Konya Turkey. In the foreground a practical set of dark photovoltaic panels on low galvanised supports, a small real steel pump head and tidy pipe connection to an irrigated field beyond. Green crop rows and a dry field road. Documentary agricultural engineering photography. No implausible floating pipes or oversized water jets.”
+
+Suffix: “Landscape 3:2 composition, realistic high-end architectural/documentary photograph, natural early morning daylight, subtle warm offwhite and charcoal with restrained realistic greens, neutral sky, photographic texture, sophisticated calm framing. The solar installation is the main subject and stays readable when cropped. Absolutely no typography, no logo, no watermark, no UI, no illustration, no miniature model, no toy-like 3D render, no infographic. It is an illustrative generated photograph, not evidence of an actual client project.”
+
+### Local map geometry
+
+`dist/assets/maps/turkiye.svg` vendors path geometry from [dnomak/svg-turkiye-haritasi](https://github.com/dnomak/svg-turkiye-haritasi). The upstream software notice is MIT, copyright Doğukan Güven Nomak. The original drawing is [Turkey provinces blank gray.svg](https://commons.wikimedia.org/wiki/File:Turkey_provinces_blank_gray.svg), author **6F-6C-63-61-79**, licensed [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). The adapted geometry is distributed under that same license.
+
+Changes: merge Istanbul’s three paths into one selection, exclude non-01–81 regions, remove upstream script/styles/markup, simplify IDs/presentation. Only path `d` geometry is carried over; remote scripts are never run. `scripts/vendor-map.mjs` reproduces the build-time import. The browser loads a single local SVG through fragment references, with no external map service. Full MIT notice, source/author, derivative changes and CC BY-SA link are retained in `dist/assets/maps/LICENSE.txt`, linked visibly below the map and embedded as SVG metadata.
+
+### Real customer video sources
+
+The existing four IDs and thumbnails are unchanged. YouTube oEmbed verified the official titles and Grid Dijital authorship on 2026-11-01; `verification/six-features-video-sources.json` records the responses. This checks title provenance, not the truth or generality of performance statements. All generated/demo content is kept separate from these customer dossiers.

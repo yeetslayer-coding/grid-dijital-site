@@ -1,0 +1,23 @@
+{
+  "browser": "151.0.7922.34",
+  "controls": [
+    {
+      "width": 320,
+      "controlsAtLeast44px": true
+    },
+    {
+      "width": 390,
+      "controlsAtLeast44px": true
+    },
+    {
+      "width": 768,
+      "controlsAtLeast44px": true
+    },
+    {
+      "width": 1440,
+      "controlsAtLeast44px": true
+    }
+  ],
+  "noJavaScriptStaticCards": "disabled, readable, no overflow",
+  "status": "passed"
+}
