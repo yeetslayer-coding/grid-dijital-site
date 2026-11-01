@@ -1,0 +1,11 @@
+node_modules
+qa
+archive
+.sites-runtime
+.openai
+verification
+scripts
+tests
+*.md
+*.tar.gz
+**/.env*
