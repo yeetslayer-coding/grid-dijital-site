@@ -1,0 +1,130 @@
+{
+  "url": "http://localhost:4317",
+  "browser": "151.0.7922.34",
+  "viewports": [
+    {
+      "width": 320,
+      "overflow": false,
+      "adHeights": [
+        1148.34375,
+        1148.34375,
+        1148.34375,
+        1148.34375
+      ],
+      "documentHeights": [
+        993.34375,
+        993.34375,
+        993.34375,
+        993.34375
+      ],
+      "processHeights": [
+        840.640625,
+        840.640625,
+        840.640625,
+        840.640625
+      ],
+      "map": true,
+      "analysis": true,
+      "projectTransfer": true,
+      "process": true,
+      "outputKeyboard": true
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "adHeights": [
+        1075.125,
+        1075.125,
+        1075.125,
+        1075.125
+      ],
+      "documentHeights": [
+        901.71875,
+        901.71875,
+        901.71875,
+        901.71875
+      ],
+      "processHeights": [
+        789.078125,
+        789.078125,
+        789.078125,
+        789.078125
+      ],
+      "map": true,
+      "analysis": true,
+      "projectTransfer": true,
+      "process": true,
+      "outputKeyboard": true
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "adHeights": [
+        601.625,
+        601.625,
+        601.625,
+        601.625
+      ],
+      "documentHeights": [
+        669.84375,
+        669.84375,
+        669.84375,
+        669.84375
+      ],
+      "processHeights": [
+        401.046875,
+        401.046875,
+        401.046875,
+        401.046875
+      ],
+      "map": true,
+      "analysis": true,
+      "projectTransfer": true,
+      "process": true,
+      "outputKeyboard": true
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "adHeights": [
+        759.484375,
+        759.484375,
+        759.484375,
+        759.484375
+      ],
+      "documentHeights": [
+        669.84375,
+        669.84375,
+        669.84375,
+        669.84375
+      ],
+      "processHeights": [
+        390.0625,
+        390.0625,
+        390.0625,
+        390.0625
+      ],
+      "map": true,
+      "analysis": true,
+      "projectTransfer": true,
+      "process": true,
+      "outputKeyboard": true
+    }
+  ],
+  "variants": {
+    "customerVideo": "Four attributed dossiers; lifecycle checked with transport stub; external playback not tested.",
+    "reducedMotion": true,
+    "instantKeyboard": true,
+    "touch": "Chromium touch emulation; not physical device testing.",
+    "noJavaScript": true,
+    "opaqueGlass": "CSS fallback simulated and visually inspected"
+  },
+  "errors": [],
+  "externalRequests": [
+    "https://www.youtube-nocookie.com/embed/j4m6kfkmXHY?autoplay=1&rel=0",
+    "https://www.youtube-nocookie.com/embed/0laH1mUQchY?autoplay=1&rel=0",
+    "https://www.youtube-nocookie.com/embed/D6cYJVJP8fY?autoplay=1&rel=0",
+    "https://www.youtube-nocookie.com/embed/Gw3Y4yd2K7w?autoplay=1&rel=0"
+  ],
+  "status": "passed"
+}

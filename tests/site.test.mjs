@@ -167,11 +167,11 @@ test('reveal observer staggers by 75ms, runs once, and releases all content when
   assert.equal(document.documentElement.classList.contains('js-reveal'), false);
   close();
 });
-test('without JavaScript the CRM and four advertising examples remain accessible and each video has a direct link', () => {
+test('without JavaScript the process descriptions and four advertising examples remain accessible and each video has a direct link', () => {
   const dom = new JSDOM(html);
   const document = dom.window.document;
   assert.equal(document.querySelectorAll('.ad-panel:not([hidden]):not([inert])').length, 4);
-  assert.equal(document.querySelectorAll('.crm-record').length, 3);
+  assert.equal(document.querySelectorAll('.stage-panel:not([hidden]):not([inert])').length, 4);
   assert.equal(document.querySelectorAll('noscript a[href*="youtube.com/watch"]').length, 4);
   assert.ok(document.querySelector('noscript style'), 'noscript style must be actual HTML, not escaped text');
   assert.ok(document.querySelector('.official-application a').href.includes('griddijital.com'));
@@ -268,23 +268,29 @@ test('advertising browsing is isolated; only the explicit CTA applies each canon
     assert.equal(window.gridSelection.get().project,window.GridLogic.projects[index]);
   });close();
 });
-test('CRM advances and resets all three fixtures without touching real visitor selections', () => {
-  const {window,document,close}=setup();
-  window.gridSelection.setCity('Edirne');window.gridSelection.setProject(window.GridLogic.projects[2]);
-  const before=JSON.stringify(window.gridSelection.get());
-  const counts=()=>[...document.querySelectorAll('.crm-count')].map(el=>Number(el.textContent));
-  assert.deepEqual(counts(),[1,1,1,0]);
-  for(const id of ['D-101','D-102','D-103']){
-    document.querySelector(`[data-record="${id}"]`).click();
-    while(!document.querySelector('#crm-advance').disabled)document.querySelector('#crm-advance').click();
-    assert.equal(document.querySelector('#crm-detail-stage').textContent,'Teklif');
-    assert.match(document.querySelector('#crm-task').textContent,/Teklifi birlikte/);
+test('process tabs expose exactly one panel and support arrow, Home and End navigation', () => {
+  const { window, document, close } = setup();
+  const root = document.querySelector('#sistem');
+  assert.equal(document.querySelector('#crm-board'), null);
+  const tabs = [...root.querySelectorAll('[role=tab]')];
+  function check(index) {
+    assert.equal(root.querySelectorAll('[role=tab][aria-selected=true]').length, 1);
+    assert.equal(root.querySelectorAll('[role=tabpanel]:not([hidden])').length, 1);
+    assert.equal(tabs[index].getAttribute('aria-selected'), 'true');
+    assert.equal(document.querySelector(`#${tabs[index].getAttribute('aria-controls')}`).hidden, false);
+    assert.equal(tabs[index].tabIndex, 0);
+    [...root.querySelectorAll('[role=tabpanel]')].forEach((panel, n) => {
+      assert.equal(panel.hasAttribute('inert'), n !== index);
+      assert.equal(panel.getAttribute('aria-hidden'), String(n !== index));
+      assert.equal(panel.tabIndex, n === index ? 0 : -1);
+    });
   }
-  assert.deepEqual(counts(),[0,0,0,3]);
-  assert.equal(JSON.stringify(window.gridSelection.get()),before);
-  assert.equal(document.querySelectorAll('[data-record]').length,3);
-  document.querySelector('#crm-reset').click();assert.deepEqual(counts(),[1,1,1,0]);
-  assert.equal(document.querySelector('#crm-detail-id').textContent,'D-101');close();
+  check(0); tabs[2].click(); check(2);
+  tabs[2].dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true })); check(3);
+  tabs[3].dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true })); check(0);
+  tabs[0].dispatchEvent(new window.KeyboardEvent('keydown', { key: 'End', bubbles: true })); check(3);
+  tabs[3].dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Home', bubbles: true })); check(0);
+  close();
 });
 test('analysis covers every answer combination with three distinct priorities in the promised order', () => {
   const {window,close}=setup(); const logic=window.GridLogic;

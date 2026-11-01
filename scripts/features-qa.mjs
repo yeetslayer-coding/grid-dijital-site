@@ -51,18 +51,20 @@ for(const width of widths){
  await page.locator('#edit-brief').click();await page.locator('input[name=analysis-response][value=same-day]').check();assert.equal(await page.locator('#analysis-result').isVisible(),false);
  await page.locator('button.form-button').click();assert.equal(await page.locator('#brief-message').innerText(),baseline);await page.locator('#edit-brief').click();
  await page.locator('#startup-analysis summary').click();await shot('#uygunluk',`${width}-contact`);
- // CRM uses local fixtures and updates counts, next task and terminal state.
- const before=await page.evaluate(()=>JSON.stringify(window.gridSelection.get()));
- await shot('#sistem',`${width}-crm`);const crmHeight=(await page.locator('.crm-shell').boundingBox()).height;
- for(const id of ['D-101','D-102','D-103']){
-  await page.locator(`[data-record="${id}"]`).click();
-  while(!await page.locator('#crm-advance').isDisabled())await page.locator('#crm-advance').click();
+ // Restore the former process presentation; inactive panels remain inaccessible.
+ assert.equal(await page.locator('#crm-board,.crm-shell,[data-record]').count(),0);
+ const processHeights=[];
+ for(let n=0;n<4;n++){
+  await page.locator('.stage-tab').nth(n).click();
+  processHeights.push((await page.locator('.stage-panels').boundingBox()).height);
+  assert.equal(await page.locator('.stage-panel:not([hidden])').count(),1);
+  assert.equal(await page.locator('.stage-panel[hidden][inert][aria-hidden=true]').count(),3);
+  await shot('#sistem',`${width}-process-${n}`);
  }
- assert.deepEqual(await page.locator('.crm-count').allTextContents(),['0','0','0','3']);
- assert.equal(await page.evaluate(()=>JSON.stringify(window.gridSelection.get())),before);
- const crmFinalHeight=(await page.locator('.crm-shell').boundingBox()).height;
- assert.ok(Math.abs(crmFinalHeight-crmHeight)<1, 'CRM height changed');
- await page.locator('#crm-reset').click();assert.deepEqual(await page.locator('.crm-count').allTextContents(),['1','1','1','0']);
+ assert.ok(Math.max(...processHeights)-Math.min(...processHeights)<1,'process height changed');
+ await page.locator('.stage-tab').last().focus();await page.keyboard.press('Home');
+ assert.equal(await page.locator('.stage-tab').first().getAttribute('aria-selected'),'true');
+ await page.keyboard.press('End');assert.equal(await page.locator('.stage-tab').last().getAttribute('aria-selected'),'true');
  // Delivery dialog stays in the viewport while background scroll settles.
  await page.locator('[data-output=tracking]').click();await page.waitForTimeout(350);await windowFits('#output-dialog');
  assert.equal(await page.locator('#output-dialog [role=tab][aria-selected=true]').getAttribute('data-output-tab'),'tracking');
@@ -77,7 +79,7 @@ for(const width of widths){
  await page.locator('#output-dialog [role=tab]').first().focus();await page.keyboard.press('End');assert.equal(await page.locator('#output-tab-review').getAttribute('aria-selected'),'true');
  for(let n=0;n<10;n++){await page.keyboard.press('Tab');assert.equal(await page.locator('#output-dialog').evaluate(e=>e.contains(document.activeElement)||document.activeElement===document.body),true);}
  await page.locator('#output-tab-review').focus();await page.keyboard.press('Escape');await page.locator('#output-dialog').waitFor({state:'hidden'});assert.equal(await page.locator('[data-output=tracking]').evaluate(e=>e===document.activeElement),true);
- await fits();report.viewports.push({width,overflow:false,adHeights:heights,documentHeights:docHeights,crmHeight,crmFinalHeight,map:true,analysis:true,projectTransfer:true,crm:true,outputKeyboard:true});console.log(`${width}px six features passed`);
+ await fits();report.viewports.push({width,overflow:false,adHeights:heights,documentHeights:docHeights,processHeights,map:true,analysis:true,projectTransfer:true,process:true,outputKeyboard:true});console.log(`${width}px features passed`);
 }
 assert.deepEqual(report.externalRequests,[],'no automatic external requests');
 await page.route('https://www.youtube-nocookie.com/**',route=>route.fulfill({status:200,contentType:'text/html',body:'<title>Video QA stub</title>'}));
@@ -95,7 +97,7 @@ const touch=await browser.newContext({viewport:{width:390,height:844},isMobile:t
 await mobile.locator('#map-city-list').tap();await mobile.locator('#city-search').fill('sanliurfa');await mobile.locator('.city-option').tap();await mobile.locator('#city-dialog').waitFor({state:'hidden'});
 assert.equal(await mobile.locator('#map-selection').innerText(),'Şanlıurfa seçildi.');await mobile.locator('[data-output=application]').tap();await mobile.waitForTimeout(300);const box=await mobile.locator('#output-dialog').boundingBox();assert.ok(box.y>=0&&box.y+box.height<=845);await mobile.screenshot({path:`qa/${label}-touch-document.png`});await touch.close();report.variants.touch='Chromium touch emulation; not physical device testing.';
 const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:844}});const staticPage=await nojs.newPage();await staticPage.goto(base,{waitUntil:'networkidle'});
-assert.equal(await staticPage.locator('.ad-panel:visible').count(),4);assert.equal(await staticPage.locator('.crm-record:visible').count(),3);assert.equal(await staticPage.locator('#brief-form').isVisible(),false);assert.equal(await staticPage.locator('.official-application a').isVisible(),true);assert.equal(await staticPage.locator('.location-phone').isVisible(),true);assert.equal(await staticPage.locator('.conveyor-object:visible').count(),5);assert.ok(await staticPage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await staticPage.locator('#sistem').screenshot({path:`qa/${label}-nojs-crm.png`});await nojs.close();report.variants.noJavaScript=true;
+assert.equal(await staticPage.locator('.ad-panel:visible').count(),4);assert.equal(await staticPage.locator('.stage-panel:visible').count(),4);assert.equal(await staticPage.locator('#brief-form').isVisible(),false);assert.equal(await staticPage.locator('.official-application a').isVisible(),true);assert.equal(await staticPage.locator('.location-phone').isVisible(),true);assert.equal(await staticPage.locator('.conveyor-object:visible').count(),5);assert.ok(await staticPage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await staticPage.locator('#sistem').screenshot({path:`qa/${label}-nojs-process.png`});await nojs.close();report.variants.noJavaScript=true;
 // Simulate unsupported blur at the computed-style level; no engine capability claim.
 await page.addStyleTag({content:'.liquid-glass{background:var(--glass-solid)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}'});await shot('#cozumler','opaque-glass');report.variants.opaqueGlass='CSS fallback simulated and visually inspected';
 assert.deepEqual(report.errors,[]);report.status='passed';

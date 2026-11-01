@@ -19,6 +19,34 @@
   const mobileMedia = window.matchMedia('(max-width:767px)');
   mobileMedia.addEventListener('change', () => closeMenu());
 
+  const tabs = all('.stage-tab');
+  const panels = all('.stage-panel');
+  function selectStage(index, focus = false) {
+    tabs.forEach((tab, n) => {
+      const selected = n === index;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.tabIndex = selected ? 0 : -1;
+      panels[n].hidden = !selected;
+      panels[n].toggleAttribute('inert', !selected);
+      panels[n].setAttribute('aria-hidden', String(!selected));
+      panels[n].tabIndex = selected ? 0 : -1;
+    });
+    if (focus) tabs[index].focus();
+  }
+  selectStage(0);
+  document.querySelector('.stage-panels').classList.add('tabs-ready');
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => selectStage(index));
+    tab.addEventListener('keydown', event => {
+      let next;
+      if (['ArrowDown', 'ArrowRight'].includes(event.key)) next = (index + 1) % tabs.length;
+      if (['ArrowUp', 'ArrowLeft'].includes(event.key)) next = (index - 1 + tabs.length) % tabs.length;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = tabs.length - 1;
+      if (next !== undefined) { event.preventDefault(); selectStage(next, true); }
+    });
+  });
+
   const stories = Object.freeze({
     j4m6kfkmXHY: { title:'Suntep Solar: "10 Keşiften 9\'unu Satışa Çeviriyoruz" | Grid Dijital Müşteri Deneyimi', solution:'GES müşteri kazanım sistemi', href:'https://griddijital.com/tr/hizmetler/ges-musteri-edinim-sistemi/' },
     '0laH1mUQchY': { title:'Family Group Enerji: "Reklamlar Açıldığı Gün Talep Akışı Başladı" | Grid Dijital Müşteri Deneyimi', solution:'GES Meta reklamları', href:'https://griddijital.com/tr/hizmetler/ges-meta-reklamlari/' },

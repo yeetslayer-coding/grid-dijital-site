@@ -86,65 +86,6 @@
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) { outputMotion(event); outputDialog.close(); }
   });
 
-  const stages = ['Yeni başvuru','Ön görüşme','Keşif','Teklif'];
-  const fixtures = [
-    { id:'D-101',city:'İzmir',project:'Konut & villa',note:'Çatı uygunluğu ve keşif',need:'Müstakil ev çatısının GES uygunluğunu öğrenmek ve keşif planlamak.',owner:'Satış danışmanı',stage:0 },
-    { id:'D-102',city:'Ankara',project:'Ticari çatı',note:'İşletme çatısı değerlendirmesi',need:'İşletme çatısında GES için çatı alanı, tüketim ve karar sürecini değerlendirmek.',owner:'Proje danışmanı',stage:1 },
-    { id:'D-103',city:'Konya',project:'Tarımsal sulama',note:'Sulama ihtiyacı ve saha keşfi',need:'Mevcut pompanın enerji ihtiyacını, sulama dönemini ve saha koşullarını değerlendirmek.',owner:'Saha sorumlusu',stage:2 }
-  ];
-  const tasks = [
-    'İlk görüşmeyi yapın; proje ihtiyacını ve karar yetkisini netleştirin.',
-    'Eksik bilgileri tamamlayın; saha ekibiyle uygun keşif zamanını belirleyin.',
-    'Keşif notlarını tamamlayın; kapsamı teklif hazırlığı için ilgili ekibe iletin.',
-    'Teklifi birlikte değerlendirmek için görüşme planlayın; açık soruları kayda alın.'
-  ];
-  let records = fixtures.map(record=>({...record})), selectedId = records[0].id;
-  const board = document.querySelector('#crm-board');
-  const advance = document.querySelector('#crm-advance');
-  function renderCRM() {
-    all('.crm-column',board).forEach((column,index) => {
-      const items = records.filter(record=>record.stage===index);
-      column.querySelector('.crm-count').textContent = items.length;
-      const list = column.querySelector('.crm-records'); list.replaceChildren();
-      items.forEach(record => {
-        const button = document.createElement('button');
-        button.type = 'button'; button.className = 'crm-record'; button.dataset.record = record.id;
-        button.setAttribute('aria-pressed',String(record.id===selectedId)); button.setAttribute('aria-controls','crm-detail');
-        // All values below are fixed fixtures, never visitor-supplied strings.
-        button.innerHTML = `<span class="record-top"><span>${record.id}</span><span aria-hidden="true">↗</span></span><strong>${record.city}</strong><span class="record-project">${record.project}</span><span class="record-note">${record.note}</span><span class="record-status">${stages[record.stage]}</span>`;
-        list.append(button);
-      });
-      if (!items.length) { const empty = document.createElement('p'); empty.className='crm-empty'; empty.textContent='Bu aşamada kayıt yok.'; list.append(empty); }
-    });
-    const selected = records.find(record=>record.id===selectedId);
-    document.querySelector('#crm-detail-id').textContent=selected.id;
-    document.querySelector('#crm-detail-stage').textContent=stages[selected.stage];
-    document.querySelector('#crm-detail-title').textContent=`${selected.city} · ${selected.project}`;
-    document.querySelector('#crm-need').textContent=selected.need;
-    document.querySelector('#crm-owner').textContent=selected.owner;
-    document.querySelector('#crm-task').textContent=tasks[selected.stage];
-    advance.disabled=selected.stage===3;
-    advance.textContent=selected.stage===3 ? 'Teklif aşamasında' : 'Sonraki aşamaya al →';
-    document.querySelector('#crm-end').hidden=selected.stage!==3;
-  }
-  board.addEventListener('click', event => {
-    const record = event.target.closest('[data-record]'); if (!record) return;
-    selectedId=record.dataset.record; renderCRM();
-    board.querySelector(`[data-record="${selectedId}"]`).focus({preventScroll:true});
-    document.querySelector('#crm-status').textContent=`${records.find(record=>record.id===selectedId).city} kaydı seçili.`;
-  });
-  advance.addEventListener('click', () => {
-    const record=records.find(item=>item.id===selectedId); if (record.stage>=3) return;
-    record.stage++; renderCRM();
-    document.querySelector('#crm-status').textContent=`${record.city} → ${stages[record.stage]}. Sonraki görev güncellendi.`;
-    if (record.stage===3) { document.querySelector('#crm-detail-title').tabIndex=-1; document.querySelector('#crm-detail-title').focus({preventScroll:true}); }
-  });
-  document.querySelector('#crm-reset').addEventListener('click', () => {
-    records=fixtures.map(record=>({...record})); selectedId=records[0].id; renderCRM();
-    document.querySelector('#crm-status').textContent='Demo başlangıca döndü. Üç temsili kayıt yeniden hazır.';
-  });
-  renderCRM();
-
   const analysis = document.querySelector('#startup-analysis');
   const analysisResult = document.querySelector('#analysis-result');
   const analysisError = document.querySelector('#analysis-error');

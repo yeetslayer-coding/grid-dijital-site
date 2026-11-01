@@ -1,4 +1,4 @@
-/* Six local interactions, built on the existing Grid typography/glass/motion tokens. */
+/* Local interactions, built on the existing Grid typography/glass/motion tokens. */
 .quiet-button,.output-open { min-height:44px; display:inline-flex; align-items:center; justify-content:space-between; gap:16px; border:1px solid var(--glass-border); border-radius:6px; padding:10px 14px; background:var(--surface); font-size:12px; font-weight:500; transition:transform var(--duration-press) var(--ease); }
 .quiet-button:active,.output-open:active { transform:translateY(1px); }
 button:disabled { cursor:default; opacity:.55; }
@@ -35,46 +35,6 @@ button:disabled { cursor:default; opacity:.55; }
 .ad-actions { display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
 .ad-actions .button { font-size:12px; padding-inline:18px; gap:16px; }
 .ad-actions .text-link { min-height:44px; font-size:11px; }
-/* A real, legible work surface within the red section. */
-.crm-shell { color:var(--ink); background:var(--canvas); border:1px solid #fafaf980; border-radius:18px; box-shadow:0 26px 60px -30px #45131b80,inset 0 1px 0 #fafaf9; overflow:hidden; }
-.crm-toolbar { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:23px 26px; border-bottom:1px solid var(--glass-border); }
-.crm-brand { display:flex; align-items:center; gap:14px; }
-.crm-mark { font:500 29px Outfit,sans-serif; color:var(--red); padding-right:16px; border-right:1px solid var(--glass-border); }
-.crm-brand strong { display:block; font-size:14px; font-weight:600; }
-.crm-brand div>span { display:block; color:var(--muted); font-size:10px; margin-top:3px; }
-.crm-toolbar-actions { display:flex; align-items:center; gap:16px; }
-.crm-toolbar .quiet-button { background:transparent; }
-.crm-workspace { display:grid; grid-template-columns:minmax(0,1fr) 280px; }
-.crm-board { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; padding:24px; min-height:420px; align-content:start; }
-.crm-column { min-width:0; }
-.crm-column h3 { display:flex; align-items:center; gap:7px; margin:0 0 16px; font:500 11px Geist,sans-serif; letter-spacing:0; min-height:22px; }
-.stage-dot { width:5px; height:5px; border:1px solid var(--muted); border-radius:50%; flex-shrink:0; }
-.crm-column:nth-child(2) .stage-dot { background:var(--muted); }
-.crm-column:nth-child(3) .stage-dot { border-color:var(--red); }
-.crm-column:nth-child(4) .stage-dot { background:var(--red); border-color:var(--red); }
-.crm-count { margin-left:auto; color:var(--muted); font-size:10px; }
-.crm-records { display:grid; align-content:start; gap:10px; }
-.crm-record { display:flex; flex-direction:column; width:100%; text-align:left; padding:15px 12px; border:1px solid var(--glass-border); border-radius:7px; background:var(--surface); box-shadow:0 3px 6px #20222205; transition:transform var(--duration-press) var(--ease); min-height:175px; }
-.crm-record[aria-pressed=true] { border-color:var(--red); box-shadow:inset 0 0 0 1px #b9364314; }
-.record-top { display:flex; justify-content:space-between; align-items:center; gap:8px; width:100%; font-size:9px; color:var(--muted); letter-spacing:.02em; }
-.crm-record>strong { font:500 24px Outfit,sans-serif; letter-spacing:-.035em; margin-top:20px; }
-.record-project { font-size:11px; margin-top:4px; }
-.record-note { font-size:10px; line-height:1.65; color:var(--muted); margin-top:14px; }
-.record-status { font-size:9px; color:var(--red); margin-top:auto; padding-top:14px; }
-.crm-empty { padding:16px 10px; font-size:10px; color:var(--muted); border:1px dashed var(--glass-border); border-radius:7px; line-height:1.7; }
-.crm-detail { padding:24px; border-left:1px solid var(--glass-border); background:#e9eae77a; min-width:0; }
-.crm-detail h3 { font-size:26px; line-height:1.2; margin:25px 0 20px; }
-.status-pill { color:var(--red); background:#b936430d; padding:4px 7px; border-radius:4px; font-size:9px; }
-.crm-detail dl { margin:0; display:grid; gap:22px; }
-.crm-detail dt { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:7px; }
-.crm-detail dd { margin:0; font-size:12px; line-height:1.75; }
-.crm-next { padding-top:18px; border-top:1px solid var(--glass-border); }
-.crm-detail .button { margin-top:24px; width:100%; font-size:11px; min-height:46px; gap:10px; padding:12px; }
-.crm-end { font-size:10px; color:var(--muted); margin-top:12px; }
-.crm-foot { padding:14px 26px; border-top:1px solid var(--glass-border); display:flex; align-items:start; justify-content:space-between; gap:24px; font-size:9px; color:var(--muted); min-height:57px; }
-.crm-foot>p { text-align:right; max-width:55ch; }
-.process .crm-shell :focus-visible { outline-color:var(--red); }
-.static-note { margin-top:22px; font-size:12px; }
 /* Geographic shapes have a full-size search/list equivalent below the map. */
 .region-map { margin-top:32px; border-radius:18px; padding:24px; }
 .map-heading .eyebrow { color:var(--red); font-size:8px; margin-bottom:10px; }
@@ -168,18 +128,9 @@ button:disabled { cursor:default; opacity:.55; }
 @media(hover:hover) and (pointer:fine) {
  #region-map [data-province]:hover { fill:#acb1a8; }
  #region-map .is-selected:hover { fill:var(--red); }
- .crm-record:hover { transform:translateY(-1px); }
  .output-open:hover { background:#b9364308; }
 }
 @media(max-width:1199px) {
- .crm-workspace { grid-template-columns:1fr; }
- .crm-detail { border-left:0; border-top:1px solid var(--glass-border); display:grid; grid-template-columns:1fr 1.6fr; gap:16px 30px; }
- .crm-detail>.record-top,.crm-detail>h3 { grid-column:1; margin:0; align-self:start; }
- .crm-detail>dl { grid-column:2; grid-row:1/4; display:grid; grid-template-columns:1fr 1fr; gap:20px; }
- .crm-next { grid-column:1/-1; }
- .crm-detail .button { margin:0; align-self:end; }
- .crm-board { min-height:310px; }
- .crm-end { grid-column:1/-1; }
  .ad-strategy { padding:28px; }
  .ad-headline { padding:22px 24px 14px; }
  .generated-note { padding-inline:24px; }
@@ -204,23 +155,6 @@ button:disabled { cursor:default; opacity:.55; }
  .ad-strategy h3 { font-size:28px; margin-bottom:13px; }
  .ad-strategy>div>p { font-size:13px; }
  .ad-actions .button { width:100%; justify-content:space-between; font-size:11px; gap:12px; }
- .crm-toolbar { align-items:flex-start; padding:18px; gap:18px; flex-wrap:wrap; }
- .crm-toolbar-actions { justify-content:space-between; width:100%; }
- .crm-brand strong { font-size:15px; }
- .crm-board { display:flex; flex-direction:column; padding:18px; gap:18px; min-height:0; }
- .crm-column h3 { font-size:12px; margin-bottom:10px; }
- .crm-record { min-height:0; padding:14px; }
- .crm-record>strong { margin-top:10px; font-size:25px; }
- .record-project { font-size:12px; }
- .record-note { font-size:11px; margin-top:8px; }
- .record-status { padding-top:10px; }
- .crm-empty { padding:12px; }
- .crm-detail { display:block; padding:22px 18px; }
- .crm-detail h3 { margin:20px 0; font-size:28px; }
- .crm-detail>dl { display:grid; grid-template-columns:1fr; gap:20px; }
- .crm-detail .button { margin-top:22px; min-height:48px; font-size:12px; }
- .crm-foot { display:block; padding:14px 18px; font-size:10px; }
- .crm-foot>p { text-align:left; margin-top:8px; }
  .region-map { padding:22px 18px 10px; }
  .map-heading h3 { font-size:28px; }
  .map-bottom { flex-wrap:wrap; gap:2px 12px; }
@@ -255,33 +189,14 @@ button:disabled { cursor:default; opacity:.55; }
  .output-footer { font-size:7px; gap:10px; }
 }
 @media(prefers-reduced-motion:reduce) {
- .quiet-button,.output-open,.crm-record { transition:none; }
- .quiet-button:active,.output-open:active,.crm-record:hover { transform:none; }
+ .quiet-button,.output-open { transition:none; }
+ .quiet-button:active,.output-open:active { transform:none; }
 }
-body[data-input=keyboard] .quiet-button,body[data-input=keyboard] .output-open,body[data-input=keyboard] .crm-record { transition:none; transform:none; }
-@media print { .output-open,.crm-toolbar-actions,.crm-detail .button,.feature-tabs { display:none; } .tab-stack.is-ready>.feature-panel[hidden] { visibility:visible; grid-area:auto; } }
+body[data-input=keyboard] .quiet-button,body[data-input=keyboard] .output-open { transition:none; transform:none; }
+@media print { .output-open,.feature-tabs { display:none; } .tab-stack.is-ready>.feature-panel[hidden] { visibility:visible; grid-area:auto; } }
 /* Top-layer windows must stay viewport-bound even while the underlying page settles. */
 #output-dialog,#video-dialog { position:fixed; inset:0; margin:auto; }
 .close-dialog { flex-shrink:0; }
-/* A column can collect all demo records without changing the desktop workspace. */
-@media(min-width:768px) {
- .crm-board { height:456px; min-height:456px; grid-template-rows:minmax(0,1fr); }
- .crm-column { display:flex; flex-direction:column; min-height:0; }
- .crm-records { overflow:auto; padding:3px; margin:-3px; scrollbar-width:thin; }
- .crm-detail { min-height:456px; }
- .crm-end { margin-top:12px; }
-}
-@media(min-width:768px) and (max-width:1199px) { .crm-detail { min-height:260px; } }
-@media(max-width:767px) {
- .crm-board { display:grid; grid-template-columns:1fr; gap:12px; }
- .crm-column,.crm-records { display:contents; }
- .crm-column>h3,.crm-empty { display:none; }
- .crm-record { min-height:184px; }
-}
-.crm-end[hidden] { display:block!important; visibility:hidden; }
-.crm-foot>p { min-height:3.4em; }
-.crm-detail h3 { min-height:2.4em; }
-#crm-need,#crm-task { min-height:5.25em; }
-@media(min-width:768px) and (max-width:1199px) { #crm-task { min-height:3.5em; } }
+
+
 .output-dialog>.dialog-top,#video-dialog>.dialog-top { position:sticky; top:0; z-index:3; background:var(--canvas); padding-block:8px; }
-.crm-record:disabled { opacity:1; cursor:default; }
