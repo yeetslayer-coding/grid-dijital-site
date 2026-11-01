@@ -1,0 +1,35 @@
+{
+  "url": "https://grid-dijital-studio.vercel.app",
+  "browser": "151.0.7922.34",
+  "viewports": [
+    {
+      "width": 390,
+      "processHeights": [
+        789.078125,
+        789.078125,
+        789.078125,
+        789.078125
+      ],
+      "crmAbsent": true,
+      "overflow": false,
+      "keyboard": true,
+      "retainedAdAndCity": true
+    },
+    {
+      "width": 1440,
+      "processHeights": [
+        390.0625,
+        390.0625,
+        390.0625,
+        390.0625
+      ],
+      "crmAbsent": true,
+      "overflow": false,
+      "keyboard": true,
+      "retainedAdAndCity": true
+    }
+  ],
+  "errors": [],
+  "noJavaScript": true,
+  "status": "passed"
+}
