@@ -1,0 +1,44 @@
+[
+  {
+    "file": "index.html",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "336e3b3a9649e57d45e612e28021bee725dfd441c5318ca2252db9731b9c26e1"
+  },
+  {
+    "file": "styles.css",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "0de0f73e73c1e9ee486fdc34e47c4b08d338a0e90253fd99e2dbc02ca3dd2f80"
+  },
+  {
+    "file": "app.js",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "f302ea242044f5b3720b2535d3be9448cde1231f6b7eedcc2044cbb5a3888e35"
+  },
+  {
+    "file": "features.js",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "58ae93e06c72b7df1af541c78d45ef69b7ca79f58689a6994bc348cc7374e3c9"
+  },
+  {
+    "file": "features.css",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "7b5d2fd0839a92651efbe8b1e008397b0111775ceadd78340a6d2ed9b11125d7"
+  },
+  {
+    "file": "selection.js",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "021bdc855e14bf9a3afaede9bb9ddea1f166e6cd6ba63394784ee714d727a33a"
+  },
+  {
+    "file": "grid-motion.js",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "c1d3a176488435721ec4cc36cae540a3bcad0622480d292a286c0bff804916cf"
+  }
+]
