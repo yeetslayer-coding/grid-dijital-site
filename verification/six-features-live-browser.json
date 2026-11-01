@@ -1,0 +1,68 @@
+{
+  "url": "https://grid-dijital-studio.vercel.app",
+  "browser": "151.0.7922.34",
+  "viewports": [
+    {
+      "width": 390,
+      "overflow": false,
+      "adHeights": [
+        1075.125,
+        1075.125,
+        1075.125,
+        1075.125
+      ],
+      "documentHeights": [
+        901.71875,
+        901.71875,
+        901.71875,
+        901.71875
+      ],
+      "crmHeight": 1410.8749389648438,
+      "crmFinalHeight": 1410.875,
+      "map": true,
+      "analysis": true,
+      "projectTransfer": true,
+      "crm": true,
+      "outputKeyboard": true
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "adHeights": [
+        759.484375,
+        759.484375,
+        759.484375,
+        759.484375
+      ],
+      "documentHeights": [
+        669.84375,
+        669.84375,
+        669.84375,
+        669.84375
+      ],
+      "crmHeight": 724.171875,
+      "crmFinalHeight": 724.171875,
+      "map": true,
+      "analysis": true,
+      "projectTransfer": true,
+      "crm": true,
+      "outputKeyboard": true
+    }
+  ],
+  "variants": {
+    "customerVideo": "Four attributed dossiers; lifecycle checked with transport stub; external playback not tested.",
+    "reducedMotion": true,
+    "instantKeyboard": true,
+    "touch": "Chromium touch emulation; not physical device testing.",
+    "noJavaScript": true,
+    "opaqueGlass": "CSS fallback simulated and visually inspected"
+  },
+  "errors": [],
+  "externalRequests": [
+    "https://www.youtube-nocookie.com/embed/j4m6kfkmXHY?autoplay=1&rel=0",
+    "https://www.youtube-nocookie.com/embed/0laH1mUQchY?autoplay=1&rel=0",
+    "https://www.youtube-nocookie.com/embed/D6cYJVJP8fY?autoplay=1&rel=0",
+    "https://www.youtube-nocookie.com/embed/Gw3Y4yd2K7w?autoplay=1&rel=0"
+  ],
+  "status": "passed"
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "file": "index.html",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "a13da819db090326bf054103e50f7e92630d97c657d5dbf85dc58e4db553e717"
+  },
+  {
+    "file": "styles.css",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "47a1fb97c12797178326a3657260abf570460541e60e97b464850b1d2c61face"
+  },
+  {
+    "file": "app.js",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "5240b0490d80f0c92839e15038307dcf70b8e4bc7e27cf8de8145e6302c9f6e2"
+  },
+  {
+    "file": "grid-motion.js",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "c1d3a176488435721ec4cc36cae540a3bcad0622480d292a286c0bff804916cf"
+  },
+  {
+    "file": "selection.js",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "021bdc855e14bf9a3afaede9bb9ddea1f166e6cd6ba63394784ee714d727a33a"
+  },
+  {
+    "file": "features.js",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "c175c236322746401e2df823c712240aa8d26f89e078aeb7e34bb9404d589280"
+  },
+  {
+    "file": "features.css",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "a4dc2429e982c55398c13dece7a574836ee0f71f1f2e00e58d01b099a6796df1"
+  },
+  {
+    "file": "assets/campaigns/irrigation.webp",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "3e3f4ea4995075d467cd7e161b65edfe32fcdeef315871105a425a5caf13944a"
+  },
+  {
+    "file": "assets/campaigns/commercial.webp",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "871aba725e8180912a40547d1991619dc3b80a746edd8d87493f3ef32a8806c0"
+  },
+  {
+    "file": "assets/campaigns/epc.webp",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "a5af86750edcfc5a5f5449b4c389bbebef1c2ea2e2837fcb3c24fa94b0546e80"
+  },
+  {
+    "file": "assets/campaigns/residential.webp",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "0c78f3c98b45c777d284ebfac86361a9a93be6f306526e6a270f55e2018791cc"
+  },
+  {
+    "file": "assets/maps/turkiye.svg",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "d6d042b0927d8b7386b0acbe017393df02dd0fdf8f6c603e3a8e9b30a27f05c0"
+  },
+  {
+    "file": "assets/maps/provinces.json",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "f5a2c3514312f778520fc5d08e63b87e7bf8868ac18a364543fe92d4b628d720"
+  },
+  {
+    "file": "assets/maps/LICENSE.txt",
+    "status": 200,
+    "matches_local": true,
+    "sha256": "b37cc6339205d11d728d303fb0eb9617c12fe87e6b03f04862b7a9e07d613ea9"
+  }
+]
